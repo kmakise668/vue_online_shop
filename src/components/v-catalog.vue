@@ -1,11 +1,12 @@
 <template>
 <div class="v-catalog">
-    <vCatalogItem v-for="product in products" :key="product.article" v-bind:product_data="product" @sendArticle="showChildArticleInConsole"/>
+    <vCatalogItem v-for="product in PRODUCTS" :key="product.article" v-bind:product_data="product" @addToCart="addToCart"/>
 </div>
 </template>
 
 <script>
 import vCatalogItem from './v-catalog-item';
+import {mapActions, mapGetters} from 'vuex'
 export default {
 
     name: 'v-catalog',
@@ -18,35 +19,35 @@ export default {
     data() {
 
         return {
-            "products": [{
-                    image: "1.png",
-                    name: "T-shirt 1",
-                    price: 100,
-                    article: "T1",
-                    available: true
-                },
-                {
-                    image: "2.png",
-                    name: "T-shirt 2",
-                    price: 200,
-                    article: "T2",
-                    available: true
-                }
-            ]
+         
         }
     },
     computed: {
-
+        ...mapGetters([
+            'PRODUCTS'
+        ])
     },
     methods: {
-        showChildArticleInConsole(data) {
-            console.log(data);
+        ...mapActions([
+        'GET_PRODUCTS_FROM_API',
+        'ADD_TO_CART'
+        ]),
+        addToCart(data) {
+        this.ADD_TO_CART(data)
         }
     },
+
     watch: {
 
     },
-    mounted() {}
+    mounted() {
+        this.GET_PRODUCTS_FROM_API()
+        // .then((response) =>{
+        //   if(response.data) {
+        //     console.log('Data arived!')
+        //   }
+        // })
+    }
 }
 </script>
 
