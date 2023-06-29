@@ -1,12 +1,21 @@
 <template>
 <div class="v-cart">
     <h1>Корзина</h1>
-    <vCartItem v-for="item in cart_data" :key="item.article" :cart_item_data="item"  @update:cart_item_data="updateCartItemData"/>
+    <p v-if="!cart_data.length">Корзина пустая</p>
+    <v-cart-item v-for="(item, index) in CART" :key="item.article" :cart_item_data="item" @update:cart_item_data="item" @deleteFromCart="deleteFromCart(index)" />
+    <div class="v-cart__total">
+        <p>Итого:</p>
+        <p>{{ cartTotalCost  }}</p>
+    </div>
 </div>
 </template>
 
 <script>
 import vCartItem from './v-cart-item'
+import {
+    mapActions,
+    mapGetters
+} from 'vuex'
 
 export default {
     name: 'v-cart',
@@ -21,15 +30,52 @@ export default {
             }
         }
     },
+    emits: ['update:cart_item_data'],
     data() {
         return {
 
         }
     },
     computed: {
+        ...mapGetters([
+            'CART'
+        ]),
+        // cartTotalCost() {
+        //     let result = []
+
+        //     if (this.CART.length) {
+        //         for (let item of this.CART) {
+        //         result.push(item.price * item.quantity)
+        //     }
+        //     result =   result.reduce(function(sum, el) {
+        //        sum + el;
+        //     })       
+        //     return result;
+        //     }else {
+        //         return 0
+        //     }
+
+        // }
+        cartTotalCost() {
+            return this.CART.map(el => Math.floor(el.price) * el.quantity).reduce((acc, el) => acc = acc + el, 0);
+            // return this.CART
+        }
 
     },
     methods: {
+        ...mapActions([
+            'DELETE_FROM_CART',
+            'INCREMENT_CART_ITEM',
+            'DECREMENT_CART_ITEM'
+        ]),
+        updateCartItemData(newData) {
+
+            const cart_item_data = this.cart_data.find(item => item.article === newData.article);
+            cart_item_data.quantity = 1
+        },
+        deleteFromCart(index) {
+            this.DELETE_FROM_CART(index)
+        }
 
     },
     watch: {

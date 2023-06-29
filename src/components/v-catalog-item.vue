@@ -7,11 +7,7 @@
 </div>
 </template>
 
-    
-    
 <script>
-
-
 export default {
     name: 'v-catalog-item',
     components: {
@@ -27,7 +23,7 @@ export default {
     },
     data() {
         return {
-      
+
         }
     },
     computed: {
@@ -36,14 +32,19 @@ export default {
     methods: {
         addToCart() {
             this.$emit('addToCart', this.product_data)
-        }
+        },
+
     },
     watch: {
 
     },
-    mounted() {}
+    mounted() {
+        this.$emit('update:cart_item_data', {
+            ...this.product_data,
+            quantity: 1
+        });
+    }
 }
 </script>
-    
-    
+
 <style></style>
