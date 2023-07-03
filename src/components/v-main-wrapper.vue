@@ -23,7 +23,9 @@ export default {
     components: {
  
     },
-    props: {},
+    props: {
+        
+    },
     data() {
         return {
             title: 'Main wrapper'
