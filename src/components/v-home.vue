@@ -8,8 +8,8 @@
   </template>
   
   <script>
-  import vCatalog from './v-catalog.vue'
-  import vCart from './v-cart.vue'
+  import vCatalog from './catalog/v-catalog.vue'
+  import vCart from './cart/v-cart.vue'
   
   export default {
     name: 'v-home',

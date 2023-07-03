@@ -2,6 +2,9 @@
 <div class="v-main-wrapper">
     {{ title }}
   <!-- <keep-alive> -->
+    <router-link :to="{name: 'cart', params: {cart_data: CART}}">
+            <div class="v-catalog__link_to_cart">Cart: {{ CART.length }}</div>
+        </router-link>
     <router-view></router-view>
   <!-- </keep-alive> -->
   
@@ -10,7 +13,10 @@
 
 <script>
 
+import {
 
+    mapGetters
+} from 'vuex';
 
 export default {
     name: 'v-main-wrapper',
@@ -24,7 +30,10 @@ export default {
         }
     },
     computed: {
-   
+        ...mapGetters([
+            'PRODUCTS',
+            'CART'
+        ])
     },
     methods: {
 

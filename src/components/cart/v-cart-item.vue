@@ -1,13 +1,13 @@
 <template>
     <div class="v-cart-item">
-      <img :src="require('../assets/images/' + cart_item_data.image)" alt="img">
+      <img :src="require('@/assets/images/'  + cart_item_data.image)" alt="img">
       <h5 class="v-cart-item__name">{{ cart_item_data.name }}</h5>
       <div class="v-cart-item__price">Price: {{ cart_item_data.price }}</div>
       <div class="v-cart-item__article">{{ cart_item_data.article }}</div>
       <span @click="decrementItem">-</span>
       <span @click="incrementItem">+</span>
       <div class="v-cart-item__quantity" >{{ cart_item_data.quantity }}</div>
-      <button class="btn v-cart-item__remove_to_cart" @click="deleteFromCart">Добавить в корзину</button>
+      <button class="btn v-cart-item__remove_to_cart" @click="deleteFromCart">Удалить с корзины</button>
     </div>
   </template>
   
@@ -23,10 +23,10 @@
     methods: {
 
       decrementItem() {
-        this.DECREMENT_CART_ITEM()
+        this.$emit('decrement')
       },
       incrementItem() {
-        this.INCREMENT_CART_ITEM()
+        this.$emit('increment')
       },
       deleteFromCart() {
         this.$emit('deleteFromCart')

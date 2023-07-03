@@ -2,7 +2,10 @@
 <div class="v-cart">
     <h1>Корзина</h1>
     <p v-if="!cart_data.length">Корзина пустая</p>
-    <v-cart-item v-for="(item, index) in CART" :key="item.article" :cart_item_data="item" @update:cart_item_data="item" @deleteFromCart="deleteFromCart(index)" />
+    <v-cart-item v-for="(item, index) in CART" :key="item.article" :cart_item_data="item" @update:cart_item_data="item" @deleteFromCart="deleteFromCart(index)"
+    @increment="increment(index)"
+    @decrement="decrement(index)"
+    />
     <div class="v-cart__total">
         <p>Итого:</p>
         <p>{{ cartTotalCost  }}</p>
@@ -75,6 +78,12 @@ export default {
         },
         deleteFromCart(index) {
             this.DELETE_FROM_CART(index)
+        },
+        increment(index) {
+            this.INCREMENT_CART_ITEM(index)
+        },
+        decrement(index) {
+            this.DECREMENT_CART_ITEM(index)
         }
 
     },
