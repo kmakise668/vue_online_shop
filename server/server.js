@@ -2,7 +2,7 @@ const express = require('express')
 const productsRouter = require('./routes/products.routes')
 const db = require('./db')
 
-const PORT = process.env.PORT || 3056
+const PORT = process.env.PORT || 8080
 
 
 
@@ -19,7 +19,7 @@ app.get('/products', async(req, res) => {
 app.use(express.json())
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:2505'); // Установите значение домена вашего клиента
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3050'); // Установите значение домена вашего клиента
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();

@@ -1,7 +1,7 @@
 <template>
 <div class="v-cart">
     <h1>Корзина</h1>
-    <p v-if="!cart_data.length">Корзина пустая</p>
+    <p v-if="!CART.length">Корзина пустая</p>
     <v-cart-item v-for="(item, index) in CART" :key="item.article" :cart_item_data="item" @update:cart_item_data="item" @deleteFromCart="deleteFromCart(index)"
     @increment="increment(index)"
     @decrement="decrement(index)"
@@ -69,7 +69,8 @@ export default {
         ...mapActions([
             'DELETE_FROM_CART',
             'INCREMENT_CART_ITEM',
-            'DECREMENT_CART_ITEM'
+            'DECREMENT_CART_ITEM',
+            
         ]),
         updateCartItemData(newData) {
 

@@ -36,7 +36,7 @@ import axios from 'axios';
 export default {
     GET_PRODUCTS_FROM_API({ commit }) {
         return axios
-            .get('http://localhost:3056/api/products') // Используйте метод get для получения данных
+            .get('http://localhost:8080/api/products') // Используйте метод get для получения данных
             .then((response) => {
                 const products = response.data;
                 products.forEach((item) => {
