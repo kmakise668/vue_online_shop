@@ -1,4 +1,7 @@
 export default {
+    ADD_PRODUCT(state, product) {
+        state.products.push(product);
+    },
     SET_PRODUCTS_TO_STATE: (state, products) => {
         state.products = products;
     },

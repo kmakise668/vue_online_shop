@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import vHome from '@/components/v-home'
 import vCatalog from '@/components/catalog/v-catalog'
 import vCart from '@/components/cart/v-cart'
+import vDashboard from '@/components/v-dashboard'
 
 const routes = [{
         path: '/home',
@@ -20,6 +21,11 @@ const routes = [{
         name: 'cart',
         component: vCart,
         props: true
+    },
+    {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: vDashboard
     }
 ]
 
