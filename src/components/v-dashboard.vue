@@ -24,7 +24,11 @@ export default {
         vAddProductsForm
     },
     computed: {
+        products() {
+            return this.$store.state.products;
+        },
         ...mapGetters(['PRODUCTS'])
+
     },
 
     methods: {
@@ -33,8 +37,9 @@ export default {
         ]),
     },
     mounted() {
-        this.GET_PRODUCTS_FROM_API()
-
+        // this.GET_PRODUCTS_FROM_API()
+        
+        this.$store.dispatch('GET_PRODUCTS_FROM_API')
     },
 
 };
