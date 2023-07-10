@@ -3,6 +3,8 @@ import vHome from '@/components/v-home'
 import vCatalog from '@/components/catalog/v-catalog'
 import vCart from '@/components/cart/v-cart'
 import vDashboard from '@/components/v-dashboard'
+import vLogin from '@/components/login/v-login'
+import vRegister from '@/components/register/v-register'
 
 const routes = [{
         path: '/home',
@@ -26,6 +28,16 @@ const routes = [{
         path: '/dashboard',
         name: 'dashboard',
         component: vDashboard
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: vLogin
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: vRegister
     }
 ]
 

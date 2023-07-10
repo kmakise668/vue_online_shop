@@ -28,12 +28,12 @@
             async addProduct(event) {
                 event.preventDefault();
                 try {
-                    const response = await axios.post('http://localhost:3002/api/products', {
+                    const response = await axios.post('http://localhost:3001/api/products', {
                         name: this.name,
                         article: this.article,
                         price: this.price,
                         available: this.available,
-                        image: this.image,
+                        image: this.image.name,
                         category: this.category
                     });
 
