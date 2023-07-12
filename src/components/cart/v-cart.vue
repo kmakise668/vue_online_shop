@@ -1,8 +1,22 @@
 <template>
-<div class="v-cart">
+<!-- <div class="v-cart">
     <h1>Корзина</h1>
     <p v-if="!CART.length">Корзина пустая</p>
-    <v-cart-item v-for="(item, index) in CART" :key="item.article" :cart_item_data="item" @update:cart_item_data="item" @deleteFromCart="deleteFromCart(index)"
+    <v-cart-item v-for="(item, index) in CART" :key="item.id" :cart_item_data="item" @update:cart_item_data="item" @deleteFromCart="deleteFromCart(index)"
+    @increment="increment(index)"
+    @decrement="decrement(index)"
+    />
+    <div class="v-cart__total">
+        <p>Итого:</p>
+        <p>{{ cartTotalCost  }}</p>
+    </div>
+</div> -->
+
+
+    <div class="v-cart">
+    <h1>Корзина</h1>
+    <p v-if="!CART.length">Корзина пустая</p>
+    <v-cart-item v-for="(item, index) in CART" :key="item.id" :cart_item_data="item" @update:cart_item_data="item" @deleteFromCart="deleteFromCart(index)"
     @increment="increment(index)"
     @decrement="decrement(index)"
     />
@@ -11,7 +25,10 @@
         <p>{{ cartTotalCost  }}</p>
     </div>
 </div>
+
 </template>
+
+
 
 <script>
 import vCartItem from './v-cart-item'
@@ -74,7 +91,7 @@ export default {
         ]),
         updateCartItemData(newData) {
 
-            const cart_item_data = this.cart_data.find(item => item.article === newData.article);
+            const cart_item_data = this.cart_data.find(item => item.id === newData.id);
             cart_item_data.quantity = 1
         },
         deleteFromCart(index) {

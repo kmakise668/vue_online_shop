@@ -12,7 +12,7 @@ export default {
         if (state.cart.length) {
             let isProductExists = false;
             state.cart.map(function(item) {
-                if (item.article === product.article) {
+                if (item.id === product.id) {
                     isProductExists = true;
                     item.quantity++
                 }

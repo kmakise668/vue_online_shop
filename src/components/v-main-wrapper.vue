@@ -1,6 +1,6 @@
 <template>
-<div class="v-main-wrapper">
-    {{ title }}
+<div class="v-main-wrapper mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+ 
   <!-- <keep-alive> -->
     <router-link :to="{name: 'cart'}">
             <div class="v-catalog__link_to_cart">Cart: {{ CART.length }}</div>
@@ -18,6 +18,8 @@ import {
     mapGetters
 } from 'vuex';
 
+
+import '@/assets/tailwind.css';
 export default {
     name: 'v-main-wrapper',
     components: {
@@ -50,13 +52,7 @@ export default {
 </script>
 
 <style>
-.v-main-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
 
-}
-@import "../assets/styles/style.scss";
+/* @import "../assets/styles/style.scss"; */
 
 </style>
