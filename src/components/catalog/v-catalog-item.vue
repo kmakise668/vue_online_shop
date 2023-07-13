@@ -8,8 +8,8 @@
 </div> -->
 
 <div class="group relative v-catalog-item">
-    <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-        <img :src="require('@/assets/images/' + product_data.image)" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
+    <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-white lg:aspect-none group-hover:opacity-75 lg:h-80">
+        <img :src="require('@/assets/images/' + product_data.image)" class=" bg-white h-full w-full object-contain transform scale-55 object-center lg:h-full lg:w-full" />
     </div>
     <div class="mt-4 flex justify-between">
         <div>
@@ -24,7 +24,7 @@
         <p class="text-sm font-medium text-gray-900"> {{ product_data.price }}</p>
 
     </div>
-    <button class="btn v-catalog-item__add_to_cart flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 mt-4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" @click="addToCart">Добавить в корзину</button>
+    <button class="btn v-catalog-item__add_to_cart flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 mt-4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600" @click="addToCart">Добавить в корзину</button>
 </div>
 </template>
 
