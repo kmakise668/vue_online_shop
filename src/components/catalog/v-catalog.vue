@@ -37,18 +37,27 @@
         </div>
 
         <p>{{ selected.name }}</p>
+
         <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
 
             <vCatalogItem v-for="product in filteredProducts" :key="product.id" v-bind:product_data="product" @addToCart="addToCart" />
 
         </div>
+        <div class="fixed bottom-12 right-20 bg-white p-4 pr-8 border border-gray-300 flex items-center rounded-lg">
+            <CheckCircleIcon class="w-5 h-5 text-green-300" />
+            <span>Товар добавлен в корзину</span>
+            <!-- <XIcon  class="w-5 h-5 text-green-300" /> -->
+        </div>
+
     </div>
 </template>
 
 <script>
 import VSelect from '../v-select'
 import vCatalogItem from './v-catalog-item';
-
+import {
+    CheckCircleIcon
+} from '@heroicons/vue/20/solid'
 import {
     mapActions,
     mapGetters
@@ -58,7 +67,9 @@ export default {
     name: 'v-catalog',
     components: {
         VSelect,
-        vCatalogItem
+        vCatalogItem,
+        CheckCircleIcon
+
     },
     data() {
         return {
