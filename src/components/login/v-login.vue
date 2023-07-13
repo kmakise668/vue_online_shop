@@ -23,7 +23,7 @@ export default {
       event.preventDefault();
 
       try {
-        const response = await axios.post('http://localhost:8080/api/users', {
+        const response = await axios.post('http://localhost:9090/api/users', {
           email: this.email,
           password: this.password
         });
