@@ -110,7 +110,7 @@ import {
 import {
     CheckIcon,
     ChevronUpDownIcon
-} from '@heroicons/vue/20/solid'
+} from '@heroicons/vue/solid'
 
 const people = [{
         name: 'Wade Cooper'
