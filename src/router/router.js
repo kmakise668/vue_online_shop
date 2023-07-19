@@ -5,6 +5,7 @@ import vCart from '@/components/cart/v-cart'
 import vDashboard from '@/components/v-dashboard'
 import vLogin from '@/components/login/v-login'
 import vRegister from '@/components/register/v-register'
+import vProductSingle from '@/components/product/v-product-single'
 
 const routes = [{
         path: '/home',
@@ -17,7 +18,12 @@ const routes = [{
         component: vCatalog,
 
     },
-
+    {
+        path: '/catalog/:slug/:id',
+        name: 'product-single',
+        component: vProductSingle,
+        props: true, // Включает передачу параметров как props в компонент
+    },
     {
         path: '/cart',
         name: 'cart',

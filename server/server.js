@@ -5,7 +5,7 @@ const authRoutes = require('./routes/auth.routes')
 
 const db = require('./db')
 
-const PORT = process.env.PORT || 9090
+const PORT = process.env.PORT || 7777
 
 
 const multer = require('multer');
