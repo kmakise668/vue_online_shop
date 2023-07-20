@@ -6,6 +6,7 @@
     <input type="text" v-model="available">
     <input type="file" ref="imageInput" name="image" accept="image/*" @change="handleImageChange">
     <input type="text" v-model="category" placeholder="Category" required>
+    <textarea name="description"  v-model="description" id="description" cols="30" rows="10" placeholder="description"></textarea>
     <button type="submit">Add Product</button>
 </form>
 </template>
@@ -20,7 +21,8 @@
                 price: null,
                 available: true,
                 image: null,
-                category: ''
+                category: '',
+                description: ''
             };
         },
         methods: {
@@ -34,7 +36,8 @@
                         price: this.price,
                         available: this.available,
                         image: this.image.name,
-                        category: this.category
+                        category: this.category,
+                        description: this. description
                     });
 
                     // Опционально: можно проверить статус ответа и обработать его соответственно

@@ -8,42 +8,52 @@ import vRegister from '@/components/register/v-register'
 import vProductSingle from '@/components/product/v-product-single'
 
 const routes = [{
-        path: '/home',
+        path: '/',
         name: 'home',
-        component: vHome
+        component: vHome,
+        meta: { breadcrumb: 'Главная страница' },
     },
     {
-        path: '/',
+        path: '/catalog',
         name: 'catalog',
         component: vCatalog,
-
+        meta: { breadcrumb: 'Catalog' },
     },
     {
         path: '/catalog/:slug/:id',
         name: 'product-single',
         component: vProductSingle,
-        props: true, // Включает передачу параметров как props в компонент
+        props: true,
+        meta: {
+            breadcrumb: route => {
+                return route.params.slug;
+            },
+        },
     },
     {
         path: '/cart',
         name: 'cart',
         component: vCart,
-        props: true
+        props: true,
+        meta: { breadcrumb: 'Cart' },
     },
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: vDashboard
+        component: vDashboard,
+        meta: { breadcrumb: 'Dashboard' },
     },
     {
         path: '/login',
         name: 'login',
-        component: vLogin
+        component: vLogin,
+        meta: { breadcrumb: 'Login' },
     },
     {
         path: '/register',
         name: 'register',
-        component: vRegister
+        component: vRegister,
+        meta: { breadcrumb: 'Register' },
     }
 ]
 

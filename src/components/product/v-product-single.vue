@@ -1,61 +1,84 @@
 <template>
-    <div class="group relative v-product-single">
-      <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-white lg:aspect-none group-hover:opacity-75 lg:h-80">
-        <img :src="product.image ? require('@/assets/images/' + product.image) : ''" class=" bg-white h-full w-full object-contain transform scale-55 object-center lg:h-full lg:w-full" />
-  </div>
-      <div class="mt-4 flex justify-between">
-        <div>
-          <h3 class="text-sm text-gray-700">
-            <a href="#">
-              <span aria-hidden="true" class="hover:bg-indigo-500" />
-              {{ product.name }}
-            </a>
-          </h3>
-          <p class="mt-1 text-sm text-gray-500">Black {{ product.id }}</p>
+<div>
+
+    <vBreadcrumb  :product-name="product.name || ''" />
+    <div class="group  mt-10 v-product-single  grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
+
+        <div class="aspect-h-1 aspect-w-1  overflow-hidden rounded-md bg-white lg:aspect-none  lg:h-80">
+            <img :src="product.image ? require('@/assets/images/' + product.image) : ''" class=" bg-white h-full w-full object-contain transform scale-55 object-center lg:h-full lg:w-full" />
         </div>
-        <p class="text-sm font-medium text-gray-900"> {{ product.price }}</p>
-      </div>
-      <button
-        class="btn v-product-single__add_to_cart flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 mt-4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
-        @click="addToCart"
-      >
-        Добавить в корзину
-      </button>
+        <div class="mt-4 ">
+            <div>
+                <h3 class="text-4xl font-medium text-gray-700">
+
+                    {{ product.name }}
+
+                </h3>
+                <p class="mt-5 mb-5 text-sm text-gray-500">Категория: <span class=" font-medium bg-stone-200 text-black py-0.5 px-2 rounded-sm text-base">{{ product.category }}</span></p>
+            </div>
+
+            <p class="text-grey-900 text-md font-normal">
+                {{ product.description }}
+            </p>
+
+            <p class="text-sm font-medium text-gray-900">Цена: {{ product.price }}</p>
+            <div class="flex ">
+                <button class="btn v-product-single__add_to_cart transition ease-in-out flex items-center mr-2 justify-center rounded-md bg-rose-600 px-3 py-1.5 mt-4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600" @click="addToCart">
+                    <ShoppingCartIcon class="text-white w-6 h-5 mr-1.5" /> Добавить в корзину
+                </button>
+                <button class="btn v-product-single__add_to_cart transition ease-in-out flex items-center justify-center border-2 border-rose-500 rounded-md bg-tranparent px-1.5 py-1.5 mt-4 text-sm font-semibold leading-6 text-rose shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600" @click="addToCart">
+                    <HeartIcon class="text-rose-500 w-6 h-5 hover:text-white" />
+                </button>
+            </div>
+        </div>
+
     </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
+</div>
+</template>
+
+<script>
+import axios from 'axios';
+import vBreadcrumb from '../v-breadcrumb.vue';
+import {
+    ShoppingCartIcon,
+    HeartIcon
+} from "@heroicons/vue/outline"
 export default {
-  name: 'v-product-single',
-  props: {
-    productData: {
-      type: Object,
-      default() {
-        return {};
-      },
+    name: 'v-product-single',
+    components: {
+        ShoppingCartIcon,
+        HeartIcon,
+        vBreadcrumb
     },
-  },
-  data() {
-    return {
-      product: {},
-    };
-  },
-  mounted() {
-    const productId = this.$route.params.id;
-    axios
-      .get(`http://localhost:7777/api/products/${productId}`)
-      .then((response) => {
-        // Обновляем локальное свойство 'product' полученными данными о продукте
-        this.product = response.data;
-        console.log(this.product.name);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  },
+    props: {
+        productData: {
+            type: Object,
+            default () {
+                return {};
+            },
+        },
+    },
+
+    data() {
+        return {
+            product: {},
+
+        };
+    },
+    mounted() {
+        const productId = this.$route.params.id;
+        axios
+            .get(`http://localhost:7777/api/products/${productId}`)
+            .then((response) => {
+                // Обновляем локальное свойство 'product' полученными данными о продукте
+                this.product = response.data;
+                console.log(this.product.name);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    },
 };
-  </script>
-  
-  <style></style>
-  
+</script>
+
+<style></style>

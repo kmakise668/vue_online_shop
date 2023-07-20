@@ -1,6 +1,6 @@
 <template>
 <div class="bg-white">
-    
+
     <h2 class="text-2xl font-bold tracking-tight text-gray-900">
         Customers also purchased
     </h2>
