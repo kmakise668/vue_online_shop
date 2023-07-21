@@ -57,19 +57,14 @@ export default {
 </style> -->
 
 <template>
-    <!-- <div>
-        <p @click="areOptionsVisible = !areOptionsVisible">{{ selected.name }}</p>
-        <div class="options" v-if="areOptionsVisible">
-            <span v-for="option in options" :key="option.value" @click="selectOption(option)">{{ option.name }}</span>
-        </div>
-    </div> -->
-    <div class=" w-72">
+
+    <div class="w-full">
         <Listbox v-model="selectedPerson">
-            <div class="relative mt-1">
-                <ListboxButton class="relative w-full cursor-pointer rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+            <div class="relative  shadow-md ">
+                <ListboxButton class="relative text-slate-500  w-full cursor-pointer   ring-1 ring-blue-200 text-slate-900 placeholder-slate-400 rounded-md  py-2 pl-3 pr-10 text-left focus:ring-2 focus:ring-blue-300 focus:outline-none  appearance-none ">
                     <span class="block truncate">{{ selected.name }}</span>
-                    <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                        <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                    <span class="pointer-events-none absolute  inset-y-0 right-0 flex items-center pr-2">
+                        <ChevronDownIcon class="h-5 w-5 text-blue-400" aria-hidden="true" />
                     </span>
                 </ListboxButton>
 
@@ -77,15 +72,15 @@ export default {
                     <ListboxOptions class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         <ListboxOption v-slot="{ active, selected }" v-for="option in options"  :key="option.value" @click="selectOption(option)" :value="option" as="template">
                             <li :class="[
-                  active ? 'bg-green-100 text-green-900' : 'text-gray-900',
+                  active ? 'bg-blue-100 text-blue-900' : 'text-gray-900',
                   'relative cursor-pointer select-none  py-2 pl-10 pr-4',
                 ]">
                                 <span :class="[
                     selected ? 'font-medium' : 'font-normal',
                     'block truncate',
                   ]">{{ option.name }}</span>
-                                <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3 text-green-600">
-                                    <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                                <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
+                                    <CheckIcon class="h-5 w-5 text-gray-400"  />
                                 </span>
                             </li>
                         </ListboxOption>
@@ -109,8 +104,8 @@ import {
 } from '@headlessui/vue'
 import {
     CheckIcon,
-    ChevronUpDownIcon
-} from '@heroicons/vue/solid'
+    ChevronDownIcon
+} from "@heroicons/vue/outline"
 
 const people = [{
         name: 'Wade Cooper'
@@ -138,6 +133,14 @@ const selectedPerson = ref(people[0])
 <script>
   export default {
       name: 'VSelect',
+      component: {
+        Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+    CheckIcon,
+    ChevronDownIcon
+      },
       props: {
           options: {
               type: Array,

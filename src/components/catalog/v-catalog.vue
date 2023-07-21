@@ -1,31 +1,35 @@
 <template>
-<div class="bg-white">
+<div class="">
 
-    <h2 class="text-2xl font-bold tracking-tight text-gray-900">
-        Customers also purchased
-    </h2>
-    <form class="group relative">
-        <svg width="20" height="20" fill="currentColor" class="absolute left-3 top-1/2 -mt-2.5 text-slate-400 pointer-events-none group-focus-within:text-blue-500" aria-hidden="true">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
-        </svg>
-        <input class="focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-slate-200 shadow-sm" type="text" aria-label="Filter projects" placeholder="Поиск..." v-model="searchQuery" @input="search" />
-    </form>
-    <VSelect :options="categories" @select="handleSelect" :selected="selected" />
-    <div class="range-slider">
-        <input type="range" min="0" max="20000" step="10" v-model.number="minPrice" @change="setRangeSlider" />
-        <input type="range" min="0" max="20000" step="10" v-model.number="maxPrice" @change="setRangeSlider" />
-    </div>
-    <div class="range-values">
-        <span>Min: {{ minPrice }}</span>
-        <span>Max: {{ maxPrice }}</span>
-    </div>
+    <h2 class="text-3xl mb-4 font-bold tracking-tight text-gray-900">Каталог товаров</h2>
+    <p class="text-gray-500 font-normal text-sm mb-12">Lorem, ipsum dolor sit amet consectetur adipisicing elit. <br/> Quidem architecto atque maiores praesentium aliquid ea laborum quisquam vero! Laborum, aut.</p>
+    <vBreadcrumbs />
 
-    <p>{{ selected.name }}</p>
+    <div class="flex">
+        <div class="mr-10 w-72 flex-shrink-0">
+            <VSelect :options="categories" @select="handleSelect" :selected="selected" />
+            <div class="range-slider mt-10">
+                
+                <input type="range" min="0" max="20000" step="10" v-model.number="minPrice" @change="setRangeSlider" />
+                <input type="range" min="0" max="20000" step="10" v-model.number="maxPrice" @change="setRangeSlider" />
+            </div>
+            <div class="range-values flex items-center justify-between">
+                <div class=" mt-5  text-gray-600 border border-blue-300 text-xs font-medium rounded-md p-4  h-5 w-20 flex items-center justify-center"> {{ minPrice }}</div>
+                <div class=" mt-5  text-gray-600 border border-blue-300 text-xs font-medium rounded-md p-4  h-5 flex w-20  items-center justify-center"> {{ maxPrice }}</div>
+            </div>
+        </div>
 
-    <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-        <vCatalogItem v-for="product in filteredProducts" :key="product.id" :product_data="product" @addToCart="addToCart" />
-        <div v-if="filteredProducts.length === 0" class="text-gray-500 text-center py-10">
-            Ничего не найдено.
+        <div class="flex-grow ">
+            <form class="group relative shadow-md ">
+                <SearchIcon class="text-slate-500 absolute w-5 h-5 top-2.5 left-2.5" />
+                <input class="focus:ring-2 focus:ring-blue-300 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-blue-200 shadow-sm" type="text" aria-label="Filter projects" placeholder="Поиск..." v-model="searchQuery" @input="search" />
+            </form>
+            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                <vCatalogItem v-for="product in filteredProducts" :key="product.id" :product_data="product" @addToCart="addToCart" />
+                <div v-if="filteredProducts.length === 0" class="text-gray-500 text-center py-10">
+                    Ничего не найдено.
+                </div>
+            </div>
         </div>
     </div>
     <div class="fixed bottom-5 right-5">
@@ -33,8 +37,8 @@
             <div v-for="(item, index) in addedItems" :key="item.id" :style="{ transitionDelay: `${index * 100}ms` }" class="relative mt-3">
 
                 <div class="bg-white p-4 pr-8 shadow-md flex items-center rounded-lg">
-                    <div class="bg-green-100 w-10 h-10 rounded-md flex items-center justify-center">
-                        <CheckCircleIcon class="w-7 h-7 text-green-300" />
+                    <div class="bg-blue-100 w-10 h-10 rounded-md flex items-center justify-center">
+                        <CheckCircleIcon class="w-7 h-7 text-blue-300" />
                     </div>
                     <div class="ml-4 mr-20 ">
                         <a href="/cart" class="font-semibold text-sm">Корзина</a>
@@ -55,12 +59,14 @@ import VSelect from "../v-select";
 import vCatalogItem from "./v-catalog-item";
 import {
     CheckCircleIcon,
-    XIcon
+    XIcon,
+    SearchIcon
 } from "@heroicons/vue/outline";
 import {
     mapActions,
     mapGetters
 } from "vuex";
+
 
 export default {
     name: "v-catalog",
@@ -69,6 +75,8 @@ export default {
         vCatalogItem,
         CheckCircleIcon,
         XIcon,
+        SearchIcon
+  
     },
     data() {
         return {
@@ -150,7 +158,6 @@ export default {
         addToCart(data) {
             this.ADD_TO_CART(data);
             this.showNotification = true;
-        
 
             const newItem = {
                 id: Date.now(),
@@ -193,10 +200,10 @@ export default {
 }
 
 .range-slider {
-    width: 200px;
-    margin: auto 16px;
+    width: 100%;
     text-align: center;
     position: relative;
+    
 }
 
 .range-slider svg,
@@ -204,6 +211,8 @@ export default {
     position: absolute;
     left: 0;
     bottom: 0;
+    right: 0;
+    height: 2px;
 }
 
 input[type="range"]::-webkit-slider-thumb {
