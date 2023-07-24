@@ -4,6 +4,11 @@ module.exports = {
     presets: [],
     darkMode: 'media', // or 'class'
     theme: {
+        extend: {
+            width: {
+                'fit-content': 'fit-content',
+            },
+        },
         accentColor: ({ theme }) => ({
             ...theme('colors'),
             auto: 'auto',

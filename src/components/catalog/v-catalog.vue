@@ -26,8 +26,9 @@
             </form>
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                 <vCatalogItem v-for="product in filteredProducts" :key="product.id" :product_data="product" @addToCart="addToCart" />
-                <div v-if="filteredProducts.length === 0" class="text-gray-500 text-center py-10">
-                    Ничего не найдено.
+                <div v-if="filteredProducts.length === 0" class="text-gray-500 text-center bg-gray-100 py-10 flex items-center justify-center flex-col">
+                    <XCircleIcon  class=" w-1/5 flex items-center text-gray-400  justify-center mb-2"  />
+                    <p class="">Ничего не найдено</p>
                 </div>
             </div>
         </div>
@@ -60,7 +61,8 @@ import vCatalogItem from "./v-catalog-item";
 import {
     CheckCircleIcon,
     XIcon,
-    SearchIcon
+    SearchIcon,
+    XCircleIcon
 } from "@heroicons/vue/outline";
 import {
     mapActions,
@@ -75,6 +77,7 @@ export default {
         vCatalogItem,
         CheckCircleIcon,
         XIcon,
+        XCircleIcon,
         SearchIcon
   
     },
