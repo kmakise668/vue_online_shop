@@ -12,7 +12,8 @@ export default {
   name: 'app',
   components: {
     vMainWrapper
-  }
+  },
+
 }
 </script>
 

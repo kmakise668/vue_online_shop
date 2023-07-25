@@ -16,7 +16,7 @@
             </h3>
             <p class="mt-1 text-sm text-gray-500">Black {{ product_data.id }}</p>
         </div>
-        <p class="text-sm font-medium text-gray-900"> {{ product_data.price }}</p>
+        <p class="text-sm font-medium text-gray-900"> {{ product_data.price }} тг.</p>
 
     </div>
     <button class="btn v-catalog-item__add_to_cart flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 mt-4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" @click="addToCart">Добавить в корзину</button>

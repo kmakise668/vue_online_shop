@@ -1,5 +1,5 @@
 <template>
-<div class="v-cart-item  flex py-5 px-5 items-center shadow-sm border-solid border-b border-gray-100 " :key="cart_item_data.id">
+<div class="v-cart-item  flex py-4 px-10 items-center shadow-sm border-solid border-b border-gray-100" :key="cart_item_data.id">
     <div class="w-1/2 flex items-center mr-20">
        <router-link  :to="`/catalog/${convertToSlug(cart_item_data.name)}/${cart_item_data.id}`" class="overflow-hidden bg-white rounded-md  mr-6 p-3 shadow-sm flex flex-shrink-0">
         <img :src="require('@/assets/images/'  + cart_item_data.image)" alt="img" class="w-20  transition   duration-300 transform scale-1 hover:scale-110">
@@ -12,7 +12,7 @@
             <div class="v-cart-item__price text-emerald-500 rounded-md mt-3 font-bold  bg-green-100 px-2 py-1 inline-block whitespace-nowrap">{{ cart_item_data.price }} тг.</div>
         </div>
     </div>
-    <div class="flex items-center justify-between rounded-md shrink-0 bg-gray-100 px-2 h-14  mr-10">
+    <div class="flex items-center justify-between rounded-md shrink-0 bg-slate-100 px-2 h-14  w-36 mr-10">
         <div @click="decrementItem" class="bg-white rounded-md flex items-center justify-center font-medium w-10 h-10 cursor-pointer">
             <MinusSmIcon class="w-6 text-blue-500" />
         </div>
@@ -21,8 +21,8 @@
             <PlusSmIcon class="w-6 text-blue-500" />
         </div>
     </div>
-    <div class=" flex justify-center w-20 ml-auto">
-        <TrashIcon class="btn  v-cart-item__remove_to_cart cursor-pointer text-gray-400 transition   duration-300 w-6 hover:text-red-500 " @click="deleteFromCart" />
+    <div class=" flex flex-grow-1 justify-center w-[5rem] ml-auto">
+        <TrashIcon class="btn  v-cart-item__remove_to_cart cursor-pointer text-gray-400 flex justify-center transition   duration-300 w-6 hover:text-red-500 " @click="deleteFromCart" />
     </div>
 
 </div>

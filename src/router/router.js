@@ -6,6 +6,8 @@ import vDashboard from '@/components/v-dashboard'
 import vLogin from '@/components/login/v-login'
 import vRegister from '@/components/register/v-register'
 import vProductSingle from '@/components/product/v-product-single'
+import vOrder from '@/components/order/v-order'
+
 
 const routes = [{
         path: '/',
@@ -54,6 +56,11 @@ const routes = [{
         name: 'register',
         component: vRegister,
         meta: { breadcrumb: 'Register' },
+    },
+    {
+        path: '/order',
+        name: 'order',
+        component: vOrder,
     }
 ]
 
