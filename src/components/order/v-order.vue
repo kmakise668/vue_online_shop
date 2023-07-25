@@ -4,6 +4,9 @@
       <div class="mx-auto max-w-2xl text-center">
         <h2 class="text-3xl font-bold  text-gray-800 sm:text-4xl">Оформить заказ</h2>
         <!-- <h1 class="text-2xl">{{CART.length}}</h1> -->
+        <div v-for="item  in CART" :key="item.id">
+          {{ item.price  }} {{  item.id }}
+        </div>
       </div>
       <form action="#" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
         <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
@@ -79,7 +82,7 @@
 
 //   import { ChevronDownIcon } from '@heroicons/vue/solid'
   import {     ShoppingCartIcon } from '@heroicons/vue/outline'
-  // import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
+  import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
   
   const agreed = ref(false)
 
@@ -88,11 +91,10 @@
 import {
     mapGetters
 } from 'vuex'
-import InputMask from 'vue-the-mask';
+
 export default {
     name: 'v-order',
     components: {
-        InputMask,
     },
     props: {
         cart_data: {
@@ -104,7 +106,6 @@ export default {
     },
     data() {
     return {
-      phoneNumber: '',
     };
   },
     computed: {
