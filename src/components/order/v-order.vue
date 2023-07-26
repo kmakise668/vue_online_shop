@@ -1,47 +1,42 @@
 <template>
-    <div class=" my-10" v-if="CART.length">
-   
-      <div class="mx-auto max-w-2xl text-center">
+<div class=" my-10" v-if="CART.length">
+
+    <div class="mx-auto max-w-2xl text-center">
         <h2 class="text-3xl font-bold  text-gray-800 sm:text-4xl">Оформить заказ</h2>
         <!-- <h1 class="text-2xl">{{CART.length}}</h1> -->
         <div v-for="item  in CART" :key="item.id">
-          {{ item.price  }} {{  item.id }}
+            {{ item.price  }} {{ item.id }}
         </div>
-      </div>
-      <form action="#" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
+    </div>
+    <form action="#" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
         <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
             <div>
-          <label for="first-name" class="block text-sm font-semibold leading-6 text-gray-900">Имя</label>
-          <div class="mt-2.5">
-            <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-          </div>
-        </div>
-        <div>
-          <label for="last-name" class="block text-sm font-semibold leading-6 text-gray-900">Email</label>
-          <div class="mt-2.5">
-            <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-          </div>
-        </div>
-          <div class="sm:col-span-2">
-            <label for="company" class="block text-sm font-semibold leading-6 text-gray-900">Номер телефона</label>
-            <div class="mt-2.5">
-              <input type="text" name="company" id="company" autocomplete="organization" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                <label for="first-name" class="block text-sm font-semibold leading-6 text-gray-900">Имя</label>
+                <div class="mt-2.5">
+                    <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                </div>
             </div>
-          </div>
-          <div>
- 
-  </div>
-  <input-mask
-      v-model="phoneNumber"
-      mask="+38 (###) ###-##-##"
-      :placeholder="'Enter phone number'"
-      class="block w-full h-5 rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-    />
-          <div class="sm:col-span-2">
-            <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">Сообщение</label>
-            <div class="mt-2.5">
-              <textarea name="message" id="message" rows="4" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+            <div>
+                <label for="last-name" class="block text-sm font-semibold leading-6 text-gray-900">Email</label>
+                <div class="mt-2.5">
+                    <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                </div>
             </div>
+            <div class="sm:col-span-2">
+                <label for="company" class="block text-sm font-semibold leading-6 text-gray-900">Номер телефона</label>
+                <div class="mt-2.5">
+                    <input type="text" name="company" id="company" autocomplete="organization" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                </div>
+            </div>
+            <div>
+
+            </div>
+
+            <div class="sm:col-span-2">
+                <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">Сообщение</label>
+                <div class="mt-2.5">
+                    <textarea name="message" id="message" rows="4" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                    </div>
           </div>
           <SwitchGroup as="div" class="flex gap-x-4 sm:col-span-2">
             <div class="flex h-6 items-center">
@@ -74,19 +69,28 @@
                 </router-link>
 
     </div>
-  </template>
   
-  <script setup>
-  import { ref } from 'vue'
+</template>
 
+  
+  
+<script setup>
+import {
+    ref
+} from 'vue'
 
 //   import { ChevronDownIcon } from '@heroicons/vue/solid'
-  import {     ShoppingCartIcon } from '@heroicons/vue/outline'
-  import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
-  
-  const agreed = ref(false)
+import {
+    ShoppingCartIcon
+} from '@heroicons/vue/outline'
+import {
+    Switch,
+    SwitchGroup,
+    SwitchLabel
+} from '@headlessui/vue'
 
-  </script>
+const agreed = ref(false)
+</script>
 <script>
 import {
     mapGetters
@@ -94,8 +98,7 @@ import {
 
 export default {
     name: 'v-order',
-    components: {
-    },
+    components: {},
     props: {
         cart_data: {
             type: Array,
@@ -105,13 +108,10 @@ export default {
         }
     },
     data() {
-    return {
-    };
-  },
+        return {};
+    },
     computed: {
         ...mapGetters(['CART']),
     },
 }
-
-
 </script>

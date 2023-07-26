@@ -23,15 +23,21 @@ export default {
       event.preventDefault();
 
       try {
-        const response = await axios.post('http://localhost:8888/api/users', {
+        const response = await axios.post('http://localhost:8888/api/users/login', { // Исправлен маршрут для авторизации
           email: this.email,
           password: this.password
         });
 
         if (response.status === 200) {
-          this.res = response.data.message;
+          this.res = 'Login successful';
           console.log('Login successful');
-          // TODO: Дополнительные действия после успешной аутентификации
+
+          // Save the token to localStorage or vuex store for future API requests
+          const token = response.data.token;
+          localStorage.setItem('token', token);
+
+          // Redirect to the admin dashboard
+          this.$router.push('/admin/dashboard');
         }
       } catch (error) {
         console.error(error);

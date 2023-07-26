@@ -1,5 +1,5 @@
 <template>
-<header class="fixed  inset-x-0 top-0 z-50" :class="{ 'shadow-sm bg-blue-50': scrolled }">
+<header  class="fixed  inset-x-0 top-0 z-50" :class="{ 'shadow-sm bg-blue-50': scrolled }">
     <nav class="flex items-center justify-between p-6  mx-auto max-w-2xl   lg:max-w-7xl  lg:px-8" aria-label="Global">
       <div class="flex lg:flex-1">
         <router-link to="/" class="-m-1.5 p-1.5">

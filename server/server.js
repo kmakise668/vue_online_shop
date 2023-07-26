@@ -1,6 +1,7 @@
 const express = require('express')
 const productsRouter = require('./routes/products.routes')
-const authRoutes = require('./routes/auth.routes')
+const usersRouter = require('./routes/users.routes')
+
 
 
 const db = require('./db')
@@ -23,8 +24,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-
+const cors = require('cors')
 const app = express()
+app.use(cors());
 app.get('/products', async(req, res) => {
     try {
         const products = await db.query('SELECT * FROM products');
@@ -37,14 +39,15 @@ app.get('/products', async(req, res) => {
 app.use(express.json())
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5555');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:9999');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
 
-app.use('/api', productsRouter)
-app.use('/api', authRoutes);
+app.use('/api/products', productsRouter)
+app.use('/api/users', usersRouter);
+
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 

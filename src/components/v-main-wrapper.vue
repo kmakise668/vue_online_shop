@@ -1,7 +1,7 @@
 <template>
-<div class="v-main-wrapper mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+<div class="v-main-wrapper mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8" >
 
-<vHeader />
+<vHeader   />
     <router-view></router-view>
 
   
@@ -29,13 +29,17 @@ export default {
     },
     data() {
         return {
-            title: 'Main wrapper'
+            title: 'Main wrapper',
+          
         }
     },
     computed: {
         ...mapGetters([
             'PRODUCTS'
-        ])
+        ]),
+    //     isAdmin() {
+    //      return this.$store.getters['isAdmin']; 
+    // },
     },
     methods: {
 

@@ -1,4 +1,5 @@
-const db = require('../db')
+const bcrypt = require('bcrypt');
+const db = require('../db');
 
 class ProductsController {
     async createProducts(req, res) {

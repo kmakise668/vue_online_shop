@@ -10,7 +10,6 @@ export default {
     },
     SET_CART: (state, product) => {
 
-
         if (state.cart.length) {
             let isProductExists = false;
             state.cart.map(function(item) {
@@ -26,7 +25,15 @@ export default {
             state.cart.push(product)
         }
     },
-
+    SET_CURRENT_USER(state, user) {
+        state.CURRENT_USER = user;
+    },
+    setAuthenticated(state, isAuthenticated) {
+        state.isAuthenticated = isAuthenticated;
+    },
+    setIsAdmin(state, isAdmin) {
+        state.isAdmin = isAdmin;
+    },
 
     REMOVE_FROM_CART: (state, index) => {
         state.cart.splice(index, 1)

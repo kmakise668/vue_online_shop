@@ -6,7 +6,9 @@ import getters from '@/vuex/getters/getters';
 const store = createStore({
     state: {
         products: [],
-        cart: []
+        cart: [],
+        isAuthenticated: false,
+        isAdmin: false,
     },
     mutations,
     actions,

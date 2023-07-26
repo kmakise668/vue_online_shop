@@ -1,39 +1,7 @@
-// const db = require('../db')
-
-// class UsersController {
-//     async createUsers(req, res) {
-//         const { name, password, email } = req.body
-//         const addUsers = await db.query(`INSERT INTO users (name, password, email) values ($1, $2, $3) RETURNING *`, [name, password, email])
-//         res.json(addUsers.rows[0])
-//     }
-//     async getUsers(req, res) {
-//         const users = await db.query('SELECT * FROM users')
-//         res.json(users.rows)
-//     }
-//     async getOneUsers(req, res) {
-//         const id = req.params.id
-//         const user = await db.query('SELECT * FROM users where id = $1', [id])
-//         res.json(user.rows[0])
-//     }
-//     async updateUsers(req, res) {
-//         const { id, name, password, email } = req.body
-//         const user = await db.query('UPDATE users set name = $2, password = $3, email = $4  where id = $1 RETURNING *', [id, name, password, email])
-//         res.json(user.rows[0])
-//     }
-//     async deleteUsers(req, res) {
-//         const id = req.params.id
-//         const user = await db.query('DELETE  FROM users where id = $1', [id])
-//         res.json(user.rows[0])
-//     }
-// }
-
-
-// module.exports = new UsersController()
-
-
-
 const bcrypt = require('bcrypt');
 const db = require('../db');
+const jwt = require('jsonwebtoken');
+
 
 class UsersController {
     async createUsers(req, res) {
@@ -79,6 +47,38 @@ class UsersController {
                 'UPDATE users SET name = $2, password = $3, email = $4 WHERE id = $1 RETURNING *', [id, name, hashedPassword, email]
             );
             res.json(user.rows[0]);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+
+    async loginUser(req, res) {
+        const { email, password } = req.body;
+
+        try {
+            // Получение пользователя из базы данных по email
+            const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+
+            if (user.rows.length === 0) {
+                // Пользователь с указанным email не найден
+                return res.status(401).json({ message: 'Authentication failed' });
+            }
+
+            const storedPassword = user.rows[0].password;
+
+            // Сравнение хэшированного пароля из базы данных с введенным паролем
+            const isPasswordValid = await bcrypt.compare(password, storedPassword);
+
+            if (!isPasswordValid) {
+                // Пароль неверный
+                return res.status(401).json({ message: 'Authentication failed' });
+            }
+
+            // Аутентификация успешна, создаем токен и отправляем его клиенту
+            const token = jwt.sign({ email: user.rows[0].email }, 'your-secret-key', { expiresIn: '1h' });
+
+            res.json({ message: 'Authentication successful', token });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Internal Server Error' });

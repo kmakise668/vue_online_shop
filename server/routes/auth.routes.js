@@ -1,37 +1,37 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const User = require('../db'); // Предполагается, что у вас есть модель User
+const db = require('../db'); // Предполагается, что у вас есть модель User
 
 const router = express.Router();
 
-router.post('/login', async(req, res) => {
-    const { email, password } = req.body;
 
-    try {
-        // Получение пользователя из базы данных по email
-        const user = await User.findOne({ email });
+// router.post('/login', async(req, res) => {
+//     const { email, password } = req.body;
 
-        if (!user) {
-            // Пользователь с указанным email не найден
-            return res.status(401).json({ message: 'Authentication failed' });
-        }
+//     try {
+//         // Получение пользователя из базы данных по email
+//         const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
-        const storedPassword = user.password;
+//         if (user.rows.length === 0) {
+//             // Пользователь с указанным email не найден
+//             return res.status(401).json({ message: 'Authentication failed' });
+//         }
 
-        // Сравнение хэшированного пароля из базы данных с введенным паролем
-        const isPasswordValid = await bcrypt.compare(password, storedPassword);
+//         const storedPassword = user.rows[0].password;
 
-        if (!isPasswordValid) {
-            // Пароль неверный
-            return res.status(401).json({ message: 'Authentication failed' });
-        }
+//         // Сравнение хэшированного пароля из базы данных с введенным паролем
+//         const isPasswordValid = await bcrypt.compare(password, storedPassword);
 
-        // Аутентификация успешна
-        res.json({ message: 'Authentication successful' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
+//         if (!isPasswordValid) {
+//             // Пароль неверный
+//             return res.status(401).json({ message: 'Authentication failed' });
+//         }
 
+//         // Аутентификация успешна
+//         res.json({ message: 'Authentication successful' });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// });
 module.exports = router;

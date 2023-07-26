@@ -9,7 +9,6 @@
 </template> -->
 
 <template>
-
   <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
@@ -63,7 +62,7 @@ export default {
     async registerUser(event) {
       event.preventDefault();
       try {
-        const response = await axios.post('http://localhost:8080/api/users', {
+        const response = await axios.post('http://localhost:8888/api/users', {
           name: this.name,
           password: this.password,
           email: this.email

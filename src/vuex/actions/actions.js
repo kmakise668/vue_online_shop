@@ -40,5 +40,17 @@ export default {
     },
     DELETE_FROM_CART({ commit }, index) {
         commit('REMOVE_FROM_CART', index)
-    }
+    },
+    async GET_CURRENT_USER({ commit }) {
+        try {
+            // Ваш код для получения текущего пользователя с сервера (например, через axios)
+            // После получения пользователя вызывайте мутацию для обновления состояния
+            const response = await axios.get('http://localhost:8888/api/users');
+            const user = response.data;
+            commit('SET_CURRENT_USER', user);
+        } catch (error) {
+            // Если возникла ошибка, обновляем текущего пользователя на null
+            commit('SET_CURRENT_USER', null);
+        }
+    },
 }

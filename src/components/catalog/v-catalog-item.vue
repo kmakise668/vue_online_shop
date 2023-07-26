@@ -1,5 +1,5 @@
 <template>
-<div class="group relative v-catalog-item bg-white">
+<div class="group relative v-catalog-item ">
     <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-white transform scale-1 transition duration-500 brightness-95  lg:aspect-none group-hover:scale-2 group-hover:brightness-100 lg:h-80">
         <router-link :to="`/catalog/${convertToSlug(product_data.name)}/${product_data.id}`">
         <img :src="require('@/assets/images/' + product_data.image)" class=" bg-white h-full w-full object-cover  object-center lg:h-full lg:w-full" />
@@ -7,7 +7,7 @@
     </div>
     <div class="mt-4 flex justify-between">
         <div>
-            <h3 class="text-sm text-gray-700">
+            <h3 class="text-md text-gray-700">
                 <router-link :to="`/catalog/${convertToSlug(product_data.name)}/${product_data.id}`">
   <span aria-hidden="true" class="hover:bg-indigo-500" />
   {{ product_data.name }}
