@@ -119,7 +119,7 @@
     { name: 'Reports', href: '#', current: false },
   ]
   const userNavigation = [
-    { name: 'Your Profile', href: '#' },
+    { name: 'Your Profile', href: '/admin/dashboard/profile' },
     { name: 'Settings', href: '#' },
     { name: 'Sign out', href: '#' },
   ]

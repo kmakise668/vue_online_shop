@@ -2,7 +2,7 @@ const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
     devServer: {
-        port: 9999
+        port: 7777
     },
     css: {
         loaderOptions: {

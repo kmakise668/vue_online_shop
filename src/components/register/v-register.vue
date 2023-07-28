@@ -41,13 +41,16 @@
         </div>
       </form>
       <p class="mt-10 text-center font-semibold leading-6 text-indigo-600 hover:text-indigo-500">{{ registrationMessage }}</p>
-    
+    {{ isAuthenticated }}
+    {{ role }}
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   data() {
@@ -59,24 +62,39 @@ export default {
     };
   },
   methods: {
+
+    ...mapMutations(['SET_AUTH', 'SET_ROLE']), 
     async registerUser(event) {
       event.preventDefault();
       try {
-        const response = await axios.post('http://localhost:8888/api/users', {
+        const response = await axios.post('http://localhost:9999/api/users', {
           name: this.name,
           password: this.password,
-          email: this.email
+          email: this.email,
+          role: '0'
         });
+     
+        // Получаем роль пользователя из ответа сервера
+        // const { role } = response.data;
+
+        // Сохраняем данные входа (роль) через Vuex
+        // this.$store.dispatch('setAuthAndRole', { isAuthenticated: true, role });
+        this.SET_AUTH(true);
+        // this.SET_ROLE(role);
+
+        // Перенаправляем на админскую или пользовательскую панель в зависимости от роли
+           this.$router.push('/dashboard');
+
         this.registrationMessage = response.data.message; // Сохранение сообщения в переменной
         console.log(response.data.message);
-        // TODO: Обработка успешной регистрации
       } catch (error) {
-        console.error(error);
         this.registrationMessage = error; // Сохранение сообщения в переменной
         console.log(error);
-        // TODO: Обработка ошибок регистрации
       }
     }
-  }
+  },
+  computed: {
+    ...mapGetters(['isAuthenticated']) 
+    },
 };
 </script>

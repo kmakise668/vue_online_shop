@@ -1,19 +1,26 @@
 <template>
-<div class="v-main-wrapper mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8" >
+<div class="v-main-wrapper mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8 "  v-if="!$route.meta.adminPanel">
 
-<vHeader   />
+    <vHeader   />
     <router-view></router-view>
 
-  
+</div>
+
+
+
+
+
+<div v-else>
+
+<router-view></router-view>
+
 </div>
 </template>
 
 <script>
-
 import {
     mapGetters
 } from 'vuex';
-
 
 import '@/assets/tailwind.css';
 
@@ -25,21 +32,22 @@ export default {
         vHeader
     },
     props: {
-        
+
     },
     data() {
         return {
             title: 'Main wrapper',
-          
+
         }
     },
     computed: {
         ...mapGetters([
             'PRODUCTS'
         ]),
-    //     isAdmin() {
-    //      return this.$store.getters['isAdmin']; 
-    // },
+    
+        //     isAdmin() {
+        //      return this.$store.getters['isAdmin']; 
+        // },
     },
     methods: {
 
@@ -48,13 +56,12 @@ export default {
 
     },
     mounted() {
-    
+
     }
+
 }
 </script>
 
 <style>
-
 @import "../assets/styles/style.scss";
-
 </style>

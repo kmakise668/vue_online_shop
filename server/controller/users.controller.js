@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 class UsersController {
     async createUsers(req, res) {
-        const { name, password, email } = req.body;
+        const { name, password, email, role } = req.body;
 
         try {
             const existingUser = await db.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -17,7 +17,7 @@ class UsersController {
             const hashedPassword = await bcrypt.hash(password, 10);
 
             const newUser = await db.query(
-                'INSERT INTO users (name, password, email) VALUES ($1, $2, $3) RETURNING *', [name, hashedPassword, email]
+                'INSERT INTO users (name, password, email, role) VALUES ($1, $2, $3,  $4) RETURNING *', [name, hashedPassword, email, role]
             );
 
             res.json({ message: 'Registration successful' });
@@ -40,11 +40,11 @@ class UsersController {
     }
 
     async updateUsers(req, res) {
-        const { id, name, password, email } = req.body;
+        const { id, name, password, email, role } = req.body;
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
             const user = await db.query(
-                'UPDATE users SET name = $2, password = $3, email = $4 WHERE id = $1 RETURNING *', [id, name, hashedPassword, email]
+                'UPDATE users SET name = $2, password = $3, email = $4 role = $5 WHERE id = $1 RETURNING *', [id, name, hashedPassword, email, role]
             );
             res.json(user.rows[0]);
         } catch (error) {
@@ -54,7 +54,7 @@ class UsersController {
     }
 
     async loginUser(req, res) {
-        const { email, password } = req.body;
+        const { email, password, role } = req.body;
 
         try {
             // Получение пользователя из базы данных по email
@@ -77,8 +77,8 @@ class UsersController {
 
             // Аутентификация успешна, создаем токен и отправляем его клиенту
             const token = jwt.sign({ email: user.rows[0].email }, 'your-secret-key', { expiresIn: '1h' });
-
-            res.json({ message: 'Authentication successful', token });
+            const role = user.rows[0].role; // Получение роли пользователя из базы данных
+            res.json({ message: 'Authentication successful', token, role });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Internal Server Error' });

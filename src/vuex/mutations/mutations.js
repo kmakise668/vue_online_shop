@@ -6,7 +6,7 @@ export default {
         state.products = products;
     },
     SET_PRODUCTS_TO_STATE: (state, products) => {
-        state.products = products;
+        state.products = products; //удалить надо
     },
     SET_CART: (state, product) => {
 
@@ -25,10 +25,12 @@ export default {
             state.cart.push(product)
         }
     },
-    SET_CURRENT_USER(state, user) {
-        state.CURRENT_USER = user;
+    SET_AUTH(state, isAuthenticated) {
+        state.isAuthenticated = isAuthenticated;
     },
-
+    SET_ROLE(state, role) {
+        state.role = role;
+    },
     REMOVE_FROM_CART: (state, index) => {
         state.cart.splice(index, 1)
     },
