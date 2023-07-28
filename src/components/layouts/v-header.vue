@@ -25,6 +25,34 @@
         </div>
         {{ isAuthenticated }}
         {{ role }}
+        <Menu as="div" class="relative ml-3">
+            <div>
+                <MenuButton class="flex max-w-xs items-center rounded-full bg-blue-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-5 focus:ring-offset-blue-800">
+             
+                    <div class="h-10 w-10 rounded-full text-white flex items-center justify-center   font-bold text-2xl line-height-0" >A</div>
+                </MenuButton>
+            </div>
+            <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+                <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
+                    <a :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
+                    </MenuItem>
+                </MenuItems>
+            </transition>
+        </Menu>
+        <div v-if="isAuthenticated">
+            <!-- Контент после успешной авторизации -->
+            <!-- <div>
+                        <h1>Welcome to the Home Page!</h1>
+                        <p v-if="role===1">You are logged in as an Admin.</p>
+                        <p v-else-if="isUser">You are logged in as a User.</p>
+                        <p v-else>You are not logged in.</p>
+                        <router-link v-if="isAdmin" :to="{ name: 'admin-dashboard' }">Go to Admin Dashboard</router-link>
+                        <router-link v-else-if="isUser" :to="{ name: 'user-dashboard' }">Go to User Dashboard</router-link>
+                        <router-link v-else :to="{ name: 'login' }">Login</router-link>
+                    </div> -->
+            <!-- <button @click="logout">Выйти</button> -->
+        </div>
     </nav>
     <Dialog as="div" class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen" is="div">
         <div class="fixed inset-0 z-50" />
@@ -45,15 +73,7 @@
                     <div class="space-y-2 py-6">
                         <a v-for="item in navigation" :key="item.name" :href="item.href" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ item.name }}</a>
                     </div>
-                    <div>
-                        <h1>Welcome to the Home Page!</h1>
-                        <p v-if="isAdmin">You are logged in as an Admin.</p>
-                        <p v-else-if="isUser">You are logged in as a User.</p>
-                        <p v-else>You are not logged in.</p>
-                        <router-link v-if="isAdmin" :to="{ name: 'admin-dashboard' }">Go to Admin Dashboard</router-link>
-                        <router-link v-else-if="isUser" :to="{ name: 'user-dashboard' }">Go to User Dashboard</router-link>
-                        <router-link v-else :to="{ name: 'login' }">Login</router-link>
-                    </div>
+
                     <div class="py-6">
                         <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
                     </div>
@@ -71,15 +91,26 @@ import {
 /* eslint-disable */
 import {
     Dialog,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
     DialogPanel
 } from '@headlessui/vue';
+
 import {
     MenuAlt2Icon,
     XIcon,
-    ShoppingCartIcon
+    ShoppingCartIcon,
+    // Bars3Icon,
+    // BellIcon,
+    // XMarkIcon
 } from '@heroicons/vue/outline';
 import {
-    mapGetters, mapMutations
+    mapGetters
 } from 'vuex';
 export default {
     name: 'v-header',
@@ -89,11 +120,37 @@ export default {
         DialogPanel,
         MenuAlt2Icon,
         XIcon,
-        ShoppingCartIcon
+        ShoppingCartIcon,
+        Disclosure,
+        DisclosureButton,
+        DisclosurePanel,
+        Menu,
+        MenuButton,
+        MenuItem,
+        MenuItems,
     },
 
     data() {
         return {
+            user: [{
+                name: 'Tom Cook',
+                email: 'tom@example.com',
+                imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            }],
+
+            userNavigation: [{
+                    name: 'Your Profile',
+                    href: '/admin/dashboard/profile'
+                },
+                {
+                    name: 'Settings',
+                    href: '#'
+                },
+                {
+                    name: 'Sign out',
+                    href: '#'
+                },
+            ],
             navigation: [{
                     name: 'Главная',
                     href: '/'
@@ -127,16 +184,24 @@ export default {
                 window.pageYOffset || document.documentElement.scrollTop;
             this.scrolled = scrollTop > 0;
         },
+        logout() {
+            // Метод для выхода пользователя
+            // Удаление токена из локального хранилища
+            localStorage.removeItem('token');
+            // Сброс состояния авторизации и роли в Vuex хранилище
+            this.$store.commit('SET_AUTH', false);
+            this.$store.commit('SET_ROLE', null);
+            this.$router.push('/login');
+        }
 
- 
     },
     computed: {
         ...mapGetters(['CART', 'isAuthenticated', 'role']),
-    
+
     },
     mounted() {
         window.addEventListener('scroll', this.handleScroll);
-   
+
     },
     beforeUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
