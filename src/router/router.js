@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import store from '@/vuex/store';
+// import store from '@/vuex/store';
 import vHome from '@/components/v-home'
 import vCatalog from '@/components/catalog/v-catalog'
 import vCart from '@/components/cart/v-cart'
@@ -120,17 +120,6 @@ const router = createRouter({
 
 
 
-router.beforeEach(async(to, from, next) => {
-    await store.dispatch('checkAuthentication');
-
-    if (to.meta.requiresAuth && !store.state.isAuthenticated) {
-        next({ name: 'Login' });
-    } else if (to.meta.requiresAdmin && (!store.state.isAuthenticated || !store.state.isAdmin)) {
-        next({ name: 'AccessDenied' });
-    } else {
-        next();
-    }
-});
 
 
 export default router;

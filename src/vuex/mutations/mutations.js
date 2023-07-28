@@ -28,12 +28,6 @@ export default {
     SET_CURRENT_USER(state, user) {
         state.CURRENT_USER = user;
     },
-    setAuthenticated(state, isAuthenticated) {
-        state.isAuthenticated = isAuthenticated;
-    },
-    setIsAdmin(state, isAdmin) {
-        state.isAdmin = isAdmin;
-    },
 
     REMOVE_FROM_CART: (state, index) => {
         state.cart.splice(index, 1)
