@@ -31,6 +31,7 @@ export default {
                     password: this.password,
                 });
                 if (response.status === 200) {
+                    console.log(response)
                     const token = response.data.token;
                     localStorage.setItem('token', token);
                     const {
@@ -41,6 +42,7 @@ export default {
                     this.$store.commit('SET_ROLE', role);
                     localStorage.setItem('token', token);
                     localStorage.setItem('role', role); // Сохраняем роль в состоянии Vuex
+
                     if (role === 1) {
                         this.$router.push('/admin');
 

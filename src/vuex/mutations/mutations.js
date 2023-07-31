@@ -31,6 +31,9 @@ export default {
     SET_ROLE(state, role) {
         state.role = role;
     },
+    SET_USER(state, user) {
+        state.user = user
+    },
     REMOVE_FROM_CART: (state, index) => {
         state.cart.splice(index, 1)
     },

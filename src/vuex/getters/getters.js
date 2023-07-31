@@ -17,4 +17,7 @@ export default {
     isAdmin(state) {
         return state.role === 1;
     },
+    user(state) {
+        return state.user;
+    },
 }

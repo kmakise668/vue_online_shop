@@ -41,28 +41,20 @@ export default {
     DELETE_FROM_CART({ commit }, index) {
         commit('REMOVE_FROM_CART', index)
     },
-    // setAuthAndRole({ commit }, { isAuthenticated, role }) {
-    //     commit('SET_AUTH', isAuthenticated);
-    //     commit('SET_ROLE', role);
-    // },
-
-    // SET_AUTHENTICATED(state, isAuthenticated) {
-    //     state.isAuthenticated = isAuthenticated;
-    // },
-    // SET_USER_ROLE(state, role) {
-    //     state.userRole = role;
-    // },
-
-    // async GET_CURRENT_USER({ commit }) {
-    //     try {
-    //         // Ваш код для получения текущего пользователя с сервера (например, через axios)
-    //         // После получения пользователя вызывайте мутацию для обновления состояния
-    //         const response = await axios.get('http://localhost:9999/api/users');
-    //         const user = response.data;
-    //         commit('SET_CURRENT_USER', user);
-    //     } catch (error) {
-    //         // Если возникла ошибка, обновляем текущего пользователя на null
-    //         commit('SET_CURRENT_USER', null);
-    //     }
-    // },
+    GET_USER_DATA({ commit, state }) {
+        if (state.user && state.user.token) {
+            try {
+                const response = axios.get('http://localhost:9999/api/users/login', {
+                    headers: {
+                        Authorization: `Bearer ${state.user.token}`,
+                    },
+                });
+                const user = response.data;
+                commit('SET_USER', user);
+            } catch (error) {
+                console.error(error);
+                // Обработка ошибки
+            }
+        }
+    },
 }

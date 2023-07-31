@@ -23,13 +23,18 @@
                 <div class="v-catalog__link_to_cart  text-xs absolute z-index-10 w-5 h-5 flex items-center justify-center  rounded-full top-[-6px] right-[-6px] bg-blue-500 shadow-md font-bold  text-white"> {{ CART.length }}</div>
             </router-link>
         </div>
+        <div v-if="user">
+        <p v-if="user.name">Привет, {{ user.name }}</p>
+        </div>
         {{ isAuthenticated }}
         {{ role }}
-        <Menu as="div" class="relative ml-3">
+
+        <Menu as="div" class="relative ml-3" v-if="isAuthenticated">
             <div>
                 <MenuButton class="flex max-w-xs items-center rounded-full bg-blue-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-5 focus:ring-offset-blue-800">
-             
-                    <div class="h-10 w-10 rounded-full text-white flex items-center justify-center   font-bold text-2xl line-height-0" >A</div>
+
+                    <div class="h-10 w-10 rounded-full text-white flex items-center justify-center   font-bold text-2xl line-height-0">{{ }}</div>
+
                 </MenuButton>
             </div>
             <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
@@ -37,9 +42,16 @@
                     <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
                     <a :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
                     </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                    <div :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer']" @click="logout">Выйти</div>
+                    </MenuItem>
                 </MenuItems>
             </transition>
         </Menu>
+        <div v-else>
+            <router-link :to="{ name: 'login' }" class="text-md transition font-normal leading-6 text-gray-900 hover:text-blue-500 ">Авторизоваться</router-link>
+        </div>
+        <p v-if="isAuthenticated && user && user.name">Привет, {{ user.name }}</p>
         <div v-if="isAuthenticated">
             <!-- Контент после успешной авторизации -->
             <!-- <div>
@@ -89,6 +101,8 @@ import {
     ref
 } from 'vue';
 /* eslint-disable */
+import axios from 'axios';
+
 import {
     Dialog,
     Disclosure,
@@ -110,6 +124,7 @@ import {
     // XMarkIcon
 } from '@heroicons/vue/outline';
 import {
+  
     mapGetters
 } from 'vuex';
 export default {
@@ -132,24 +147,19 @@ export default {
 
     data() {
         return {
-            user: [{
-                name: 'Tom Cook',
-                email: 'tom@example.com',
-                imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-            }],
 
             userNavigation: [{
-                    name: 'Your Profile',
-                    href: '/admin/dashboard/profile'
+                    name: 'Личный кабинет',
+                    href: '/admin'
                 },
                 {
-                    name: 'Settings',
-                    href: '#'
+                    name: 'История заказов',
+                    href: '/request'
                 },
                 {
-                    name: 'Sign out',
-                    href: '#'
-                },
+                    name: 'Редактировать профиль',
+                    href: '/edit-profile'
+                }
             ],
             navigation: [{
                     name: 'Главная',
@@ -192,11 +202,10 @@ export default {
             this.$store.commit('SET_AUTH', false);
             this.$store.commit('SET_ROLE', null);
             this.$router.push('/login');
-        }
-
+        },
     },
     computed: {
-        ...mapGetters(['CART', 'isAuthenticated', 'role']),
+        ...mapGetters(['CART', 'isAuthenticated', 'role', 'user']),
 
     },
     mounted() {

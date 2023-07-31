@@ -8,7 +8,8 @@ const store = createStore({
         products: [],
         cart: [],
         isAuthenticated: false,
-        role: ''
+        role: '',
+        user: '',
 
     },
     mutations,
