@@ -3,6 +3,42 @@ const db = require('../db');
 const jwt = require('jsonwebtoken');
 
 
+
+
+async function findUserByEmail(email) {
+    try {
+        const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+        return user.rows[0]; // Возвращаем пользователя, если найден
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function verifyPassword(password, hashedPassword) {
+    try {
+        const isPasswordValid = await bcrypt.compare(password, hashedPassword);
+        return isPasswordValid; // Возвращаем true, если пароль верный, иначе false
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function generateTokens(user) {
+    try {
+        const accessToken = jwt.sign({ email: user.email }, 'your-secret-key', { expiresIn: '1h' });
+        const refreshToken = jwt.sign({ email: user.email }, 'your-refresh-secret-key', { expiresIn: '7d' });
+
+        // Сохраняем refreshToken в базе данных
+        const saveRefreshTokenQuery = 'INSERT INTO refresh_tokens (id, token) VALUES ($1, $2)';
+        await db.query(saveRefreshTokenQuery, [user.id, refreshToken]);
+
+        return { accessToken, refreshToken };
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 class UsersController {
     async createUsers(req, res) {
         const { name, password, email, role } = req.body;
@@ -53,35 +89,31 @@ class UsersController {
         }
     }
 
-    async loginUser(req, res) {
-        const { email, password, role } = req.body;
+    async login(req, res) {
+        const { email, password } = req.body;
 
         try {
-            // Получение пользователя из базы данных по email
-            const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+            const user = await findUserByEmail(email);
 
-            if (user.rows.length === 0) {
-                // Пользователь с указанным email не найден
-                return res.status(401).json({ message: 'Authentication failed' });
+            if (!user) {
+                return res.status(401).json({ message: 'Invalid credentials' });
             }
 
-            const storedPassword = user.rows[0].password;
-
-            // Сравнение хэшированного пароля из базы данных с введенным паролем
-            const isPasswordValid = await bcrypt.compare(password, storedPassword);
+            const isPasswordValid = await verifyPassword(password, user.password);
 
             if (!isPasswordValid) {
-                // Пароль неверный
-                return res.status(401).json({ message: 'Authentication failed' });
+                return res.status(401).json({ message: 'Invalid credentials' });
             }
 
-            // Аутентификация успешна, создаем токен и отправляем его клиенту
-            const token = jwt.sign({ email: user.rows[0].email }, 'your-secret-key', { expiresIn: '1h' });
-            const role = user.rows[0].role; // Получение роли пользователя из базы данных
-            res.json({ message: 'Authentication successful', token, role });
+            const tokens = await generateTokens(user); // Добавлено await здесь
+
+            // Создание сессии на сервере
+            req.session.userId = user.id;
+            req.session.refreshToken = tokens.refreshToken;
+
+            return res.status(200).json({ accessToken: tokens.accessToken });
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Internal Server Error' });
+            return res.status(500).json({ message: 'Internal server error' });
         }
     }
 

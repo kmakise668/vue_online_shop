@@ -1,12 +1,12 @@
 const express = require('express')
 const productsRouter = require('./routes/products.routes')
 const usersRouter = require('./routes/users.routes')
-
+const session = require('express-session');
 
 
 const db = require('./db')
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8089
 
 
 const multer = require('multer');
@@ -27,6 +27,16 @@ const upload = multer({ storage: storage });
 const cors = require('cors')
 const app = express()
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(session({
+    secret: 'secret_key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Установите secure: true для HTTPS
+}));
+
 app.get('/products', async(req, res) => {
     try {
         const products = await db.query('SELECT * FROM products');

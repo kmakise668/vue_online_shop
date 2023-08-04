@@ -65,33 +65,32 @@ export default {
 
     ...mapMutations(['SET_AUTH', 'SET_ROLE']), 
     async registerUser(event) {
-      event.preventDefault();
-      try {
-        const response = await axios.post('http://localhost:8080/api/users', {
-          name: this.name,
-          password: this.password,
-          email: this.email,
-          role: '0'
-        });
-     
-        // Получаем роль пользователя из ответа сервера
-        // const { role } = response.data;
+  event.preventDefault();
+  try {
+    const response = await axios.post('http://localhost:8089/api/users', {
+      name: this.name,
+      password: this.password,
+      email: this.email,
+      role: '0'
+    });
+ 
+    // В данном случае, сервер возвращает только сообщение об успешной регистрации, без данных о роли
+    // Если сервер вернул данные о роли, раскомментируйте следующие строки для сохранения роли через Vuex
+    // const { role } = response.data;
+    this.SET_AUTH(true);
+    this.SET_ROLE(response.data.role);
 
-        // Сохраняем данные входа (роль) через Vuex
-        // this.$store.dispatch('setAuthAndRole', { isAuthenticated: true, role });
-        this.SET_AUTH(true);
-        // this.SET_ROLE(role);
+    // Вместо сохранения роли через Vuex, просто перенаправим пользователя на страницу /dashboard
+    this.$router.push('/dashboard');
 
-        // Перенаправляем на админскую или пользовательскую панель в зависимости от роли
-           this.$router.push('/dashboard');
+    this.registrationMessage = response.data.message; // Сохранение сообщения в переменной
+    console.log(response.data.message);
+  } catch (error) {
+    this.registrationMessage = error.response.data.message; // Сохранение сообщения об ошибке в переменной
+    console.log(error.response.data.message);
+  }
+}
 
-        this.registrationMessage = response.data.message; // Сохранение сообщения в переменной
-        console.log(response.data.message);
-      } catch (error) {
-        this.registrationMessage = error; // Сохранение сообщения в переменной
-        console.log(error);
-      }
-    }
   },
   computed: {
     ...mapGetters(['isAuthenticated']) 

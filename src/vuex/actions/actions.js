@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
     GET_PRODUCTS_FROM_API({ commit }) {
         return axios
-            .get('http://localhost:8080/api/products') // Используйте метод get для получения данных
+            .get('http://localhost:8089/api/products') // Используйте метод get для получения данных
             .then((response) => {
                 const products = response.data;
                 products.forEach((item) => {
@@ -19,7 +19,7 @@ export default {
     },
     async addProduct({ commit, dispatch }, productData) {
         try {
-            const response = await axios.post('http://localhost:8080/api/products', productData);
+            const response = await axios.post('http://localhost:8089/api/products', productData);
             const newProduct = response.data;
             commit('ADD_PRODUCT', newProduct); // Вызываем мутацию для добавления продукта в состояние
             await dispatch('GET_PRODUCTS_FROM_API'); // Вызываем действие для обновления списка товаров
@@ -44,7 +44,7 @@ export default {
     GET_USER_DATA({ commit, state }) {
         if (state.user && state.user.token) {
             try {
-                const response = axios.get('http://localhost:8080/api/users/login', {
+                const response = axios.get('http://localhost:8089/api/users/login', {
                     headers: {
                         Authorization: `Bearer ${state.user.token}`,
                     },

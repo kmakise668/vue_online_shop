@@ -9,7 +9,7 @@
 
 <script>
 import axios from 'axios';
-// import jwt_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 
 // import { mapGetters } from 'vuex';
 
@@ -26,34 +26,32 @@ export default {
         async login(event) {
             event.preventDefault();
             try {
-                const response = await axios.post('http://localhost:8080/api/users/login', {
+                const response = await axios.post('http://localhost:8089/api/users/login', {
                     email: this.email,
                     password: this.password,
                 });
+
                 if (response.status === 200) {
-                    console.log(response)
-                    const token = response.data.token;
-                    localStorage.setItem('token', token);
+                    const accessToken = response.data.accessToken;
+                    // Нет необходимости сохранять токен в localStorage, т.к. сессии хранятся на сервере
+                    // localStorage.setItem('token', token);
+
                     const {
                         role
-                    } = response.data; // Получаем роль из ответа сервера
-                    console.log(response.data)
+                    } = jwt_decode(accessToken); // Расшифровываем токен и получаем роль
+
                     this.$store.commit('SET_AUTH', true);
                     this.$store.commit('SET_ROLE', role);
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('role', role); // Сохраняем роль в состоянии Vuex
 
                     if (role === 1) {
                         this.$router.push('/admin');
-
                     } else {
                         this.$router.push('/dashboard');
-
                     }
                 }
             } catch (error) {
                 console.error(error);
-                // Здесь можете обработать сообщение об ошибке
+                // Здесь можете обработать сообщение об ошибке, если необходимо
             }
         },
 
