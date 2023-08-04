@@ -6,7 +6,7 @@ const usersRouter = require('./routes/users.routes')
 
 const db = require('./db')
 
-const PORT = process.env.PORT || 9999
+const PORT = process.env.PORT || 8080
 
 
 const multer = require('multer');

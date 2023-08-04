@@ -26,7 +26,7 @@ export default {
         async login(event) {
             event.preventDefault();
             try {
-                const response = await axios.post('http://localhost:9999/api/users/login', {
+                const response = await axios.post('http://localhost:8080/api/users/login', {
                     email: this.email,
                     password: this.password,
                 });
