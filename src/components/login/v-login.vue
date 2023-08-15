@@ -34,11 +34,11 @@ export default {
                 if (response.status === 200) {
                     const accessToken = response.data.accessToken;
                     // Нет необходимости сохранять токен в localStorage, т.к. сессии хранятся на сервере
-                    // localStorage.setItem('token', token);
-
+    
                     const {
                         role
                     } = jwt_decode(accessToken); // Расшифровываем токен и получаем роль
+                    localStorage.setItem('role', role);
 
                     this.$store.commit('SET_AUTH', true);
                     this.$store.commit('SET_ROLE', role);

@@ -2,15 +2,20 @@ const bcrypt = require('bcrypt');
 const db = require('../db');
 const jwt = require('jsonwebtoken');
 
+const session = require('express-session'); // Подключаем express-session
+
 
 
 
 async function findUserByEmail(email) {
     try {
+        console.log('Finding user by email:', email);
         const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-        return user.rows[0]; // Возвращаем пользователя, если найден
+        console.log('Found user:', user.rows[0]);
+        return user.rows[0];
     } catch (error) {
-        throw error;
+        console.error('Error while finding user by email:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 }
 
@@ -23,21 +28,32 @@ async function verifyPassword(password, hashedPassword) {
     }
 }
 
+
+
 async function generateTokens(user) {
     try {
-        const accessToken = jwt.sign({ email: user.email }, 'your-secret-key', { expiresIn: '1h' });
+        console.log('Generating tokens for user:', user);
+        const accessToken = jwt.sign({ email: user.email, role: user.role }, 'your-secret-key', { expiresIn: '1h' });
         const refreshToken = jwt.sign({ email: user.email }, 'your-refresh-secret-key', { expiresIn: '7d' });
 
-        // Сохраняем refreshToken в базе данных
-        const saveRefreshTokenQuery = 'INSERT INTO refresh_tokens (id, token) VALUES ($1, $2)';
-        await db.query(saveRefreshTokenQuery, [user.id, refreshToken]);
+        const existingRefreshToken = await db.query('SELECT * FROM refresh_tokens WHERE id = $1', [user.id]);
+        if (existingRefreshToken.rows.length > 0) {
+            // Если запись с таким user.id уже существует, обновите refreshToken вместо вставки новой записи
+            const updateRefreshTokenQuery = 'UPDATE refresh_tokens SET token = $2 WHERE id = $1';
+            await db.query(updateRefreshTokenQuery, [user.id, refreshToken]);
+        } else {
+            // Если записи с user.id нет, вставьте новую запись
+            const saveRefreshTokenQuery = 'INSERT INTO refresh_tokens (id, token) VALUES ($1, $2)';
+            await db.query(saveRefreshTokenQuery, [user.id, refreshToken]);
+        }
 
+        console.log('Generated tokens:', { accessToken, refreshToken });
         return { accessToken, refreshToken };
     } catch (error) {
+        console.error('Error while generating tokens:', error);
         throw error;
     }
 }
-
 
 class UsersController {
     async createUsers(req, res) {
@@ -80,7 +96,7 @@ class UsersController {
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
             const user = await db.query(
-                'UPDATE users SET name = $2, password = $3, email = $4 role = $5 WHERE id = $1 RETURNING *', [id, name, hashedPassword, email, role]
+                'UPDATE users SET name = $2, password = $3, email = $4, role = $5 WHERE id = $1 RETURNING *', [id, name, hashedPassword, email, role]
             );
             res.json(user.rows[0]);
         } catch (error) {
@@ -93,29 +109,42 @@ class UsersController {
         const { email, password } = req.body;
 
         try {
+            console.log('Logging in with email:', email);
             const user = await findUserByEmail(email);
 
             if (!user) {
+                console.log('User not found:', email);
                 return res.status(401).json({ message: 'Invalid credentials' });
             }
 
             const isPasswordValid = await verifyPassword(password, user.password);
 
             if (!isPasswordValid) {
+                console.log('Invalid password for user:', email);
                 return res.status(401).json({ message: 'Invalid credentials' });
             }
 
-            const tokens = await generateTokens(user); // Добавлено await здесь
+            const tokens = await generateTokens(user);
+            console.log('Generated tokens:', tokens);
 
-            // Создание сессии на сервере
+
+            req.session.user = {
+                id: user.id,
+                email: user.email,
+                role: user.role,
+            };
+
             req.session.userId = user.id;
             req.session.refreshToken = tokens.refreshToken;
 
+            console.log('Logged in successfully:', email);
             return res.status(200).json({ accessToken: tokens.accessToken });
         } catch (error) {
+            console.error('Login error:', error);
             return res.status(500).json({ message: 'Internal server error' });
         }
     }
+
 
     async deleteUsers(req, res) {
         const id = req.params.id;
@@ -125,3 +154,5 @@ class UsersController {
 }
 
 module.exports = new UsersController();
+
+// module.exports = { UsersController, sessionMiddleware };

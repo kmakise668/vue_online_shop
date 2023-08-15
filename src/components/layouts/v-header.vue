@@ -197,7 +197,7 @@ export default {
         logout() {
             // Метод для выхода пользователя
             // Удаление токена из локального хранилища
-            localStorage.removeItem('token');
+            localStorage.removeItem('role');
             // Сброс состояния авторизации и роли в Vuex хранилище
             this.$store.commit('SET_AUTH', false);
             this.$store.commit('SET_ROLE', null);

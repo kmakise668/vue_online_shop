@@ -2,7 +2,7 @@ const express = require('express')
 const productsRouter = require('./routes/products.routes')
 const usersRouter = require('./routes/users.routes')
 const session = require('express-session');
-
+const sessionSecret = 'your-session-secret'; // Замените на свой секретный ключ
 
 const db = require('./db')
 
@@ -23,19 +23,25 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-
+const sessionMiddleware = session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Важно настроить secure в true для HTTPS
+});
 const cors = require('cors')
 const app = express()
+app.use(sessionMiddleware);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session({
-    secret: 'secret_key',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } // Установите secure: true для HTTPS
-}));
+// app.use(session({
+//     secret: 'secret_key',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false } // Установите secure: true для HTTPS
+// }));
 
 app.get('/products', async(req, res) => {
     try {
