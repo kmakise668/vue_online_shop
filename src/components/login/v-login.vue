@@ -7,6 +7,8 @@
 </form>
 </template>
 
+
+
 <script>
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
@@ -23,23 +25,48 @@ export default {
     },
     methods: {
         // Ваш метод login
+        
         async login(event) {
             event.preventDefault();
             try {
-                const response = await axios.post('http://localhost:8089/api/users/login', {
+                const response = await axios.post('http://localhost:8080/api/users/login', {
                     email: this.email,
                     password: this.password,
                 });
 
                 if (response.status === 200) {
                     const accessToken = response.data.accessToken;
-                    // Нет необходимости сохранять токен в localStorage, т.к. сессии хранятся на сервере
-    
+                    const refreshToken = response.data.refreshToken;
+                    console.log(accessToken)
+                    // Сохраняем Refresh Token в Cookie с флагами httpOnly, secure и SameSite
+                    // document.cookie = `accessToken=${accessToken}; path=/; secure; httpOnly; SameSite=strict`;
+                    document.cookie = `refreshToken=${refreshToken}; path=/; secure; httpOnly; SameSite=strict`;
                     const {
                         role
                     } = jwt_decode(accessToken); // Расшифровываем токен и получаем роль
                     localStorage.setItem('role', role);
+                    // localStorage.setItem('accessToken', accessToken);
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+                        // Сохраняем Access Token в куки
+                   
+          // Проверяем наличие и содержание токенов
+                    if (accessToken) {
+                        console.log('Access Token:', accessToken);
+                        // Здесь можно выполнить другие действия, например, запросы к защищенным ресурсам
+                    } else {
+                        console.log('Access Token не найден');
+                    }
 
+                    if (refreshToken) {
+                        console.log('Refresh Token:', refreshToken);
+                        // Здесь можно выполнить другие действия, например, обновление Access Token
+                    } else {
+                        console.log('Refresh Token не найден');
+
+
+                        
+                }   // Декодирование токена
+                
                     this.$store.commit('SET_AUTH', true);
                     this.$store.commit('SET_ROLE', role);
 
@@ -54,8 +81,10 @@ export default {
                 // Здесь можете обработать сообщение об ошибке, если необходимо
             }
         },
+        
 
     },
 
 };
 </script>
+

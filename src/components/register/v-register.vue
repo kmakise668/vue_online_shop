@@ -67,7 +67,7 @@ export default {
     async registerUser(event) {
   event.preventDefault();
   try {
-    const response = await axios.post('http://localhost:8089/api/users', {
+    const response = await axios.post('http://localhost:8080/api/users', {
       name: this.name,
       password: this.password,
       email: this.email,

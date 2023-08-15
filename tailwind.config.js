@@ -98,7 +98,7 @@ module.exports = {
             xl: '0.75rem',
             '2xl': '1rem',
             '3xl': '1.5rem',
-            full: '7777px',
+            full: '1212px',
         },
         borderSpacing: ({ theme }) => ({
             ...theme('spacing'),
@@ -695,8 +695,8 @@ module.exports = {
             100: '1',
         },
         order: {
-            first: '-7777',
-            last: '7777',
+            first: '-1212',
+            last: '1212',
             none: '0',
             1: '1',
             2: '2',

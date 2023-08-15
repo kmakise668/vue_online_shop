@@ -3,10 +3,10 @@ const productsRouter = require('./routes/products.routes')
 const usersRouter = require('./routes/users.routes')
 const session = require('express-session');
 const sessionSecret = 'your-session-secret'; // Замените на свой секретный ключ
-
+// const cookieParser = require('cookie-parser');
 const db = require('./db')
-
-const PORT = process.env.PORT || 8089
+const authMiddleware = require('./authMiddleware');
+const PORT = process.env.PORT || 8080
 
 
 const multer = require('multer');
@@ -23,15 +23,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const sessionMiddleware = session({
-    secret: sessionSecret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }, // Важно настроить secure в true для HTTPS
-});
 const cors = require('cors')
 const app = express()
-app.use(sessionMiddleware);
+// app.use(cookieParser())
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -55,7 +49,7 @@ app.get('/products', async(req, res) => {
 app.use(express.json())
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:7777');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:1212');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();
@@ -63,6 +57,44 @@ app.use((req, res, next) => {
 
 app.use('/api/products', productsRouter)
 app.use('/api/users', usersRouter);
+// Применяем middleware к маршрутам, требующим авторизации
+
+app.get('/dashboard', authMiddleware, (req, res) => {
+    // Остальной код для обработки страницы dashboard
+  });
+  
+  app.get('/admin', authMiddleware, (req, res) => {
+    // Остальной код для обработки страницы admin
+    
+  });
+
+  
+
+  app.post('/refresh-token', async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+        return res.status(401).json({ message: 'Refresh Token not found' });
+    }
+
+    try {
+        const user = await verifyRefreshToken(refreshToken); // Проверяем Refresh Token
+
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid Refresh Token' });
+        }
+
+        const accessToken = jwt.sign({ email: user.email, role: user.role }, 'your-secret-key', { expiresIn: '1m' }); // Создаем новый Access Token
+        
+        console.log('Access Token expired, refreshing...'); // Выводим в консоль при истечении Access Token
+        console.log('Access Token refreshed'); // Выводим в консоль после обновления Access Token
+
+        res.json({ accessToken }); // Отправляем новый Access Token в ответ
+    } catch (error) {
+        console.error('Error while refreshing token:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
 
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

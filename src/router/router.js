@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import store from '@/vuex/store';
+import store from '@/vuex/store';
 import vHome from '@/components/v-home'
 import vCatalog from '@/components/catalog/v-catalog'
 import vCart from '@/components/cart/v-cart'
-import vDashboard from '@/components/dashboard/v-dashboard'
+// import vDashboard from '@/components/dashboard/v-dashboard'
 import vLogin from '@/components/login/v-login'
 import vRegister from '@/components/register/v-register'
 import vProductSingle from '@/components/product/v-product-single'
@@ -42,16 +42,28 @@ const routes = [{
     },
     {
         path: '/admin',
-        name: 'admin-panel',
-        component: vDashboard,
-        meta: { requiresAdmin: true },
+        name: 'Admin',
+        component: () => import('@/components/dashboard/v-dashboard'),
+        beforeEnter: (to, from, next) => {
+          if (store.state.isAuthenticated && store.state.role === 1) {
+            next();
+          } else {
+            next('/login');
+          }
+        },
     },
     {
         path: '/dashboard',
-        name: 'dashboard',
-        component: vHome,
-        meta: { requiresAuth: true },
-    },
+        name: 'Dashboard',
+        component: () => import('@/components/v-home'),
+        beforeEnter: (to, from, next) => {
+          if (store.state.isAuthenticated && store.state.role !== 1) {
+            next();
+          } else {
+            next('/login');
+          }
+        },
+      },
     {
         path: '/login',
         name: 'login',
