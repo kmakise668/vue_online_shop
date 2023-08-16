@@ -42,29 +42,15 @@ const routes = [{
     },
     {
         path: '/admin',
-        name: 'Admin',
-        component: () =>
-            import ('@/components/dashboard/v-dashboard'),
-        beforeEnter: (to, from, next) => {
-            if (store.state.isAuthenticated && store.state.role === 1) {
-                next();
-            } else {
-                next('/login');
-            }
-        },
+        name: 'admin-panel',
+        component: vDashboard,
+        meta: { requiresAdmin: true },
     },
     {
         path: '/dashboard',
-        name: 'Dashboard',
-        component: () =>
-            import ('@/components/v-home'),
-        beforeEnter: (to, from, next) => {
-            if (store.state.isAuthenticated && store.state.role !== 1) {
-                next();
-            } else {
-                next('/login');
-            }
-        },
+        name: 'dashboard',
+        component: vHome,
+        meta: { requiresAuth: true },
     },
     {
         path: '/login',

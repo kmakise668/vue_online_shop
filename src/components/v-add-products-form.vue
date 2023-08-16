@@ -30,7 +30,7 @@
             async addProduct(event) {
                 event.preventDefault();
                 try {
-                    const response = await axios.post('http://localhost:8089/api/products', {
+                    const response = await axios.post('http://localhost:8080/api/products', {
                         name: this.name,
                         article: this.article,
                         price: this.price,

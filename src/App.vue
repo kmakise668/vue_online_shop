@@ -17,18 +17,18 @@ export default {
 created() {
   // Получение данных из локального хранилища
   // const token = localStorage.getItem('token');
-  const role = localStorage.getItem('role');
+  // const role = localStorage.getItem('role');
 
-  // Проверка наличия токена и роли в локальном хранилище
-  if (role) {
-    // Установка данных в состояние Vuex (если нужно)
-    this.$store.commit('SET_AUTH', true);
-    this.$store.commit('SET_ROLE', role);
+  // // Проверка наличия токена и роли в локальном хранилище
+  // if (role) {
+  //   // Установка данных в состояние Vuex (если нужно)
+  //   this.$store.commit('SET_AUTH', true);
+  //   this.$store.commit('SET_ROLE', role);
 
-    // Установка данных в переменные компонента (если нужно)
-    // this.token = token;
-    this.role = role;
-  }
+  //   // Установка данных в переменные компонента (если нужно)
+  //   // this.token = token;
+  //   this.role = role;
+  // }
 }
 
 }

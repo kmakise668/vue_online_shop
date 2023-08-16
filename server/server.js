@@ -3,10 +3,10 @@ const productsRouter = require('./routes/products.routes')
 const usersRouter = require('./routes/users.routes')
 const session = require('express-session');
 const sessionSecret = 'your-session-secret'; // Замените на свой секретный ключ
-const bcrypt = require('bcrypt');
-const db = require('./db')
 
-const PORT = process.env.PORT || 8089
+const db = require('./db')
+const authMiddleware = require('./authMiddleware');
+const PORT = process.env.PORT || 8080
 
 
 const multer = require('multer');
@@ -23,15 +23,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const sessionMiddleware = session({
-    secret: sessionSecret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }, // Важно настроить secure в true для HTTPS
-});
 const cors = require('cors')
 const app = express()
-app.use(sessionMiddleware);
+    // app.use(cookieParser())
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -50,7 +44,7 @@ app.get('/products', async(req, res) => {
 app.use(express.json())
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:7777');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();
@@ -58,7 +52,6 @@ app.use((req, res, next) => {
 
 app.use('/api/products', productsRouter)
 app.use('/api/users', usersRouter);
-
 
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
