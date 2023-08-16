@@ -14,6 +14,8 @@
 <template>
 
     <div class="min-h-full">
+
+      {{  email }}
       <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div class="flex h-16 items-center justify-between">
@@ -137,7 +139,7 @@ export default {
         // vAddProductsForm
     },
     data() {
-
+  
     },
     computed: {
         products() {

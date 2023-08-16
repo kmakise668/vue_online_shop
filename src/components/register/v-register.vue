@@ -78,7 +78,8 @@ export default {
     // Если сервер вернул данные о роли, раскомментируйте следующие строки для сохранения роли через Vuex
     // const { role } = response.data;
     this.SET_AUTH(true);
-    this.SET_ROLE(response.data.role);
+    localStorage.setItem('role', 0);
+   
 
     // Вместо сохранения роли через Vuex, просто перенаправим пользователя на страницу /dashboard
     this.$router.push('/dashboard');

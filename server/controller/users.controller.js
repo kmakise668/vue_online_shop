@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const db = require('../db');
 const jwt = require('jsonwebtoken');
 
-const session = require('express-session'); // Подключаем express-session
+// const session = require('express-session'); // Подключаем express-session
 
 
 
@@ -72,7 +72,30 @@ class UsersController {
                 'INSERT INTO users (name, password, email, role) VALUES ($1, $2, $3,  $4) RETURNING *', [name, hashedPassword, email, role]
             );
 
-            res.json({ message: 'Registration successful' });
+
+            // Генерация токенов
+            const tokens = await generateTokens(newUser.rows[0]);
+
+            // Отправляем куки на клиентскую сторону
+            res.cookie('accessToken', tokens.accessToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict'
+            });
+            res.cookie('refreshToken', tokens.refreshToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict'
+            });
+
+            // Возвращаем данные о успешной регистрации и авторизации
+            res.json({
+                message: 'Registration and login successful',
+                accessToken: tokens.accessToken,
+                refreshToken: tokens.refreshToken
+            });
+
+
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Internal Server Error' });
