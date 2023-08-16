@@ -42,16 +42,56 @@ const routes = [{
     },
     {
         path: '/admin',
-        name: 'admin-panel',
-        component: vDashboard,
-        meta: { requiresAdmin: true },
+        name: 'Admin',
+
+        component: () =>
+            import ('@/components/dashboard/v-dashboard'),
+        beforeEnter: (to, from, next) => {
+            if (store.state.isAuthenticated && store.state.role === 1) {
+                next();
+            } else {
+                next('/login');
+            }
+        },
+
+
+        component: () =>
+            import ('@/components/dashboard/v-dashboard'),
+        beforeEnter: (to, from, next) => {
+            if (store.state.isAuthenticated && store.state.role === 1) {
+                next();
+            } else {
+                next('/login');
+            }
+
+        },
     },
     {
         path: '/dashboard',
-        name: 'dashboard',
-        component: vHome,
-        meta: { requiresAuth: true },
+        name: 'Dashboard',
+
+        component: () =>
+            import ('@/components/v-home'),
+        beforeEnter: (to, from, next) => {
+            if (store.state.isAuthenticated && store.state.role !== 1) {
+                next();
+            } else {
+                next('/login');
+            }
+        },
     },
+    {
+        component: () =>
+            import ('@/components/v-home'),
+        beforeEnter: (to, from, next) => {
+            if (store.state.isAuthenticated && store.state.role !== 1) {
+                next();
+            } else {
+                next('/login');
+            }
+        },
+    },
+
     {
         path: '/login',
         name: 'login',

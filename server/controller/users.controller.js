@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 
 
 
-  
 
 async function findUserByEmail(email) {
     try {
@@ -34,8 +33,8 @@ async function verifyPassword(password, hashedPassword) {
 async function generateTokens(user) {
     try {
         console.log('Generating tokens for user:', user);
-        const accessToken = jwt.sign({ email: user.email, role: user.role }, 'your-secret-key', { expiresIn: '1m' });
-        const refreshToken = jwt.sign({ email: user.email }, 'your-refresh-secret-key', { expiresIn: '1m' });
+        const accessToken = jwt.sign({ email: user.email, role: user.role }, 'your-secret-key', { expiresIn: '1h' });
+        const refreshToken = jwt.sign({ email: user.email }, 'your-refresh-secret-key', { expiresIn: '7d' });
 
         const existingRefreshToken = await db.query('SELECT * FROM refresh_tokens WHERE id = $1', [user.id]);
         if (existingRefreshToken.rows.length > 0) {
@@ -128,126 +127,46 @@ class UsersController {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
+
     async login(req, res) {
         const { email, password } = req.body;
-    
-        try {
-          console.log('Logging in with email:', email);
-          const user = await findUserByEmail(email);
-    
-          if (!user) {
-            console.log('User not found:', email);
-            return res.status(401).json({ message: 'Invalid credentials' });
-          }
-    
-          const isPasswordValid = await verifyPassword(password, user.password);
-    
-          if (!isPasswordValid) {
-            console.log('Invalid password for user:', email);
-            return res.status(401).json({ message: 'Invalid credentials' });
-          }
-    
-          const tokens = await generateTokens(user);
-          console.log('Generated tokens:', tokens);
-    
-          // Set-Cookie header with Refresh Token in HttpOnly and Secure cookie
-          res.cookie('refreshToken', tokens.refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-          });
-    
-          console.log('Logged in successfully:', email);
-          return res.status(200).json({
-            accessToken: tokens.accessToken,
-            refreshToken: tokens.refreshToken,
-          });
-        } catch (error) {
-          console.error('Login error:', error);
-          return res.status(500).json({ message: 'Internal server error' });
-        }
-      }
 
-      async  verifyRefreshToken(refreshToken) {
         try {
-            // Проверяем валидность Refresh Token и декодируем его
-            const decoded = jwt.verify(refreshToken, 'your-refresh-secret-key');
-    
-            // Дополнительная логика, например, проверка в базе данных наличия Refresh Token и связанного с ним пользователя
-            const refreshTokenExists = await checkIfRefreshTokenExistsInDatabase(decoded.email);
-            if (!refreshTokenExists) {
-                return null;
+            console.log('Logging in with email:', email);
+            const user = await findUserByEmail(email);
+
+            if (!user) {
+                console.log('User not found:', email);
+                return res.status(401).json({ message: 'Invalid credentials' });
             }
-    
-            // Если всё в порядке, возвращаем данные пользователя
-            return {
-                email: decoded.email,
-                role: decoded.role, // Если информация о роли доступна в токене
-                // ... другие поля ...
+
+            const isPasswordValid = await verifyPassword(password, user.password);
+
+            if (!isPasswordValid) {
+                console.log('Invalid password for user:', email);
+                return res.status(401).json({ message: 'Invalid credentials' });
+            }
+
+            const tokens = await generateTokens(user);
+            console.log('Generated tokens:', tokens);
+
+
+            req.session.user = {
+                id: user.id,
+                email: user.email,
+                role: user.role,
             };
+
+            req.session.userId = user.id;
+            req.session.refreshToken = tokens.refreshToken;
+
+            console.log('Logged in successfully:', email);
+            return res.status(200).json({ accessToken: tokens.accessToken });
         } catch (error) {
-            console.error('Error verifying Refresh Token:', error);
-            return null; // В случае ошибки возвращаем null
+            console.error('Login error:', error);
+            return res.status(500).json({ message: 'Internal server error' });
         }
     }
-    
-      async refreshAccessToken(req, res) {
-        const refreshToken = req.cookies.refreshToken;
-    
-        try {
-          const user = await verifyRefreshToken(refreshToken);
-    
-          if (!user) {
-            return res.status(401).json({ message: 'Invalid refresh token' });
-          }
-    
-          const accessToken = generateAccessToken(user);
-    
-          return res.status(200).json({ accessToken });
-        } catch (error) {
-          console.error('Refresh token error:', error);
-          return res.status(500).json({ message: 'Internal server error' });
-        }
-      }
-    // async login(req, res) {
-    //     const { email, password } = req.body;
-
-    //     try {
-    //         console.log('Logging in with email:', email);
-    //         const user = await findUserByEmail(email);
-
-    //         if (!user) {
-    //             console.log('User not found:', email);
-    //             return res.status(401).json({ message: 'Invalid credentials' });
-    //         }
-
-    //         const isPasswordValid = await verifyPassword(password, user.password);
-
-    //         if (!isPasswordValid) {
-    //             console.log('Invalid password for user:', email);
-    //             return res.status(401).json({ message: 'Invalid credentials' });
-    //         }
-
-    //         const tokens = await generateTokens(user);
-    //         console.log('Generated tokens:', tokens);
-
-
-    //         req.session.user = {
-    //             id: user.id,
-    //             email: user.email,
-    //             role: user.role,
-    //         };
-
-    //         req.session.userId = user.id;
-    //         req.session.refreshToken = tokens.refreshToken;
-
-    //         console.log('Logged in successfully:', email);
-    //         return res.status(200).json({ accessToken: tokens.accessToken });
-    //     } catch (error) {
-    //         console.error('Login error:', error);
-    //         return res.status(500).json({ message: 'Internal server error' });
-    //     }
-    // }
 
 
     async deleteUsers(req, res) {
