@@ -33,7 +33,7 @@ async function verifyPassword(password, hashedPassword) {
 async function generateTokens(user) {
     try {
         console.log('Generating tokens for user:', user);
-        const accessToken = jwt.sign({ email: user.email, role: user.role }, 'your-secret-key', { expiresIn: '1h' });
+        const accessToken = jwt.sign({ email: user.email, role: user.role }, 'your-secret-key', { expiresIn: '1m' });
         const refreshToken = jwt.sign({ email: user.email }, 'your-refresh-secret-key', { expiresIn: '7d' });
 
         const existingRefreshToken = await db.query('SELECT * FROM refresh_tokens WHERE id = $1', [user.id]);
@@ -76,11 +76,13 @@ class UsersController {
             // Генерация токенов
             const tokens = await generateTokens(newUser.rows[0]);
 
+            const expirationTime = new Date().getTime() + 60000;
             // Отправляем куки на клиентскую сторону
             res.cookie('accessToken', tokens.accessToken, {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'strict'
+                sameSite: 'strict',
+                expires: new Date(expirationTime) // Устанавливаем время истечения куки
             });
             res.cookie('refreshToken', tokens.refreshToken, {
                 httpOnly: true,
@@ -149,7 +151,7 @@ class UsersController {
 
             const tokens = await generateTokens(user);
             console.log('Generated tokens:', tokens);
-
+            console.log('Access Token Expiration:', jwt.decode(tokens.accessToken).exp)
 
             req.session.user = {
                 id: user.id,

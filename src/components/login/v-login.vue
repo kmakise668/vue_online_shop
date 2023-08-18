@@ -42,7 +42,7 @@
         if (role === 1) {
          this.$router.push('/admin');
         } else {
-          this.$router.replace('/dashboard');
+          this.$router.push('/dashboard');
         }
       }
     } catch (error) {

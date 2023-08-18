@@ -2,11 +2,11 @@ const express = require('express')
 const productsRouter = require('./routes/products.routes')
 const usersRouter = require('./routes/users.routes')
 const session = require('express-session');
-const sessionSecret = 'your-session-secret'; // Замените на свой секретный ключ
+// const sessionSecret = 'your-session-secret'; // Замените на свой секретный ключ
 
 const db = require('./db')
-const authMiddleware = require('./authMiddleware');
-const PORT = process.env.PORT || 8080
+    // const authMiddleware = require('./authMiddleware');
+const PORT = process.env.PORT || 8089
 
 
 const multer = require('multer');
@@ -21,6 +21,7 @@ const storage = multer.diskStorage({
     }
 });
 
+
 const upload = multer({ storage: storage });
 
 const cors = require('cors')
@@ -30,8 +31,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 } // Например, установите 1 час 3600000 
+}));
 app.get('/products', async(req, res) => {
     try {
         const products = await db.query('SELECT * FROM products');

@@ -8,6 +8,7 @@ import vLogin from '@/components/login/v-login'
 import vRegister from '@/components/register/v-register'
 import vProductSingle from '@/components/product/v-product-single'
 import vOrder from '@/components/order/v-order'
+import NotFound from '@/components/error-page/404'
 
 
 const routes = [{
@@ -55,32 +56,12 @@ const routes = [{
         },
 
 
-        component: () =>
-            import ('@/components/dashboard/v-dashboard'),
-        beforeEnter: (to, from, next) => {
-            if (store.state.isAuthenticated && store.state.role === 1) {
-                next();
-            } else {
-                next('/login');
-            }
 
-        },
     },
     {
         path: '/dashboard',
         name: 'Dashboard',
 
-        component: () =>
-            import ('@/components/v-home'),
-        beforeEnter: (to, from, next) => {
-            if (store.state.isAuthenticated && store.state.role !== 1) {
-                next();
-            } else {
-                next('/login');
-            }
-        },
-    },
-    {
         component: () =>
             import ('@/components/v-home'),
         beforeEnter: (to, from, next) => {
@@ -97,18 +78,50 @@ const routes = [{
         name: 'login',
         component: vLogin,
         meta: { breadcrumb: 'Login' },
+        beforeEnter: (to, from, next) => {
+            if (store.state.isAuthenticated) {
+                // Если пользователь авторизован, перенаправляем в личный кабинет
+                if (store.state.role === 1) {
+                    next('/admin');
+                } else {
+                    next('/dashboard');
+                }
+            } else {
+                // Если пользователь не авторизован, позволяем доступ к странице входа
+                next();
+            }
+        }
     },
     {
         path: '/register',
         name: 'register',
         component: vRegister,
         meta: { breadcrumb: 'Register' },
+        beforeEnter: (to, from, next) => {
+            if (store.state.isAuthenticated) {
+                // Если пользователь авторизован, перенаправляем в личный кабинет
+                if (store.state.role === 1) {
+                    next('/admin');
+                } else {
+                    next('/dashboard');
+                }
+            } else {
+                // Если пользователь не авторизован, позволяем доступ к странице входа
+                next();
+            }
+        }
     },
     {
         path: '/order',
         name: 'order',
         component: vOrder,
     },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: NotFound,
+        meta: { skipAuthCheck: true }
+    }
     // { path: '/:pathMatch(.*)*', component: NotFound },
 ]
 
@@ -118,10 +131,6 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
 })
-
-
-
-
 
 
 
