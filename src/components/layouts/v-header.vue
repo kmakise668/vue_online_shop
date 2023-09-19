@@ -1,10 +1,45 @@
 <template>
-<header class="fixed  inset-x-0 top-0 z-50" :class="{ 'shadow-sm bg-blue-50': scrolled }">
+
+
+<header v-if=" isAuthenticated && user.role === 1" class="admin_header  inset-x-0 t-0 z-50 h-32 fixed top-0 w-full p-8 flex items-center">
+    <div class="header-sidebar fixed   bg-blue-600  w-30 left-0 h-screen bottom-0">
+        <router-link to="/" class="-m-1.5 p-1.5">
+            <img class="w-14" src="@/assets/images/logo_3.png" alt="" />
+        </router-link>
+    </div>
+<div class="admin left-35 flex justify-between">
+    <form class="group relative shadow-md ">
+        <SearchIcon class="text-slate-500 absolute w-5 h-5 top-2.5 left-2.5" />
+        <input class="focus:ring-2 focus:ring-blue-300 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-blue-200 shadow-sm" type="text" aria-label="Filter projects" placeholder="Поиск..." v-model="searchQuery" @input="search" />
+    </form>
+
+    <Menu as="div" class="relative ml-6" v-if="isAuthenticated">
+            <div>
+                <MenuButton class="flex max-w-xs items-end rounded-full bg-blue-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-5 focus:ring-offset-blue-800">
+
+                    <div class="h-12 w-12 rounded-full text-white uppercase flex items-center justify-center font-bold text-2xl line-height-0">  <span v-if="user.email && user.email.length > 0">{{ user.email.charAt(0) }}</span></div>
+
+                </MenuButton>
+            </div>
+            <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+                <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
+                    <a :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
+                    </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                    <div :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer']" @click="logout">Выйти</div>
+                    </MenuItem>
+                </MenuItems>
+            </transition>
+        </Menu>
+</div>
+</header>
+
+<header v-else-if="isAuthenticated || !isAuthenticated" class="fixed  inset-x-0 top-0 z-50" :class="{ 'shadow-sm bg-blue-50': scrolled }">
     <nav class="flex items-center justify-between p-6  mx-auto max-w-2xl   lg:max-w-7xl  lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1 items-center">
             <router-link to="/" class="-m-1.5 p-1.5">
-                <span class="sr-only">Your Company</span>
-                <img class="w-14" src="../../assets/images/logo_3.png" alt="" />
+                <img class="w-14" src="@/assets/images/logo_3.png" alt="" />
             </router-link>
             <div class="ml-3">
                 <div class="text-gray-900 font-medium">Откройте мир Trailz</div>
@@ -27,17 +62,14 @@
                 <div class="v-catalog__link_to_cart  text-xs absolute z-index-10 w-5 h-5 flex items-center justify-center  rounded-full top-[-6px] right-[-6px] bg-blue-500 shadow-md font-bold  text-white"> {{ CART.length }}</div>
             </router-link>
         </div>
-        <div v-if="user">
-        <p v-if="user.name">Привет, {{ user.name }}</p>
-        </div>
-        {{ isAuthenticated }}
-        {{ role }}
+   
 
-        <Menu as="div" class="relative ml-3" v-if="isAuthenticated">
+
+        <Menu as="div" class="relative ml-6" v-if="isAuthenticated">
             <div>
-                <MenuButton class="flex max-w-xs items-center rounded-full bg-blue-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-5 focus:ring-offset-blue-800">
+                <MenuButton class="flex max-w-xs items-end rounded-full bg-blue-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-5 focus:ring-offset-blue-800">
 
-                    <div class="h-10 w-10 rounded-full text-white flex items-center justify-center   font-bold text-2xl line-height-0">{{ }}</div>
+                    <div class="h-12 w-12 rounded-full text-white uppercase flex items-center justify-center font-bold text-2xl line-height-0">  <span v-if="user.email && user.email.length > 0">{{ user.email.charAt(0) }}</span></div>
 
                 </MenuButton>
             </div>
@@ -52,10 +84,10 @@
                 </MenuItems>
             </transition>
         </Menu>
-        <div v-else>
-            <router-link :to="{ name: 'login' }" class="text-md transition font-normal leading-6 text-gray-900 hover:text-blue-500 ">Авторизоваться</router-link>
+        <div v-else class="ml-8">
+            <router-link :to="{ name: 'login' }" class="text-md transition font-normal leading-6 text-gray-900 hover:text-blue-500 ">Войти</router-link>
         </div>
-        <p v-if="isAuthenticated && user && user.name">Привет, {{ user.name }}</p>
+
         <div v-if="isAuthenticated">
             <!-- Контент после успешной авторизации -->
             <!-- <div>
@@ -105,7 +137,7 @@ import {
     ref
 } from 'vue';
 /* eslint-disable */
-import axios from 'axios';
+
 
 import {
     Dialog,
@@ -129,7 +161,7 @@ import {
 } from '@heroicons/vue/outline';
 import {
   
-    mapGetters
+    mapGetters, mapActions
 } from 'vuex';
 export default {
     name: 'v-header',
@@ -192,7 +224,15 @@ export default {
 
         };
     },
+  
+  created() {
+    const userId = localStorage.getItem('id');
+    this.fetchUserData(userId);
+  },
+
+
     methods: {
+        ...mapActions(['fetchUserData']), 
         handleScroll() {
             const scrollTop =
                 window.pageYOffset || document.documentElement.scrollTop;
@@ -201,7 +241,7 @@ export default {
         logout() {
             // Метод для выхода пользователя
             // Удаление токена из локального хранилища
-            // localStorage.removeItem('role');
+            localStorage.removeItem('role');
             // Сброс состояния авторизации и роли в Vuex хранилище
             document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -212,7 +252,7 @@ export default {
         },
     },
     computed: {
-        ...mapGetters(['CART', 'isAuthenticated', 'role', 'user']),
+        ...mapGetters(['user', 'CART', 'isAuthenticated', 'role'])
 
     },
     mounted() {

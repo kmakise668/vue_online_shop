@@ -119,7 +119,7 @@ export default {
 
         // }
         cartTotalCost() {
-            return this.CART.map(el => Math.floor(el.price) * el.quantity).reduce((acc, el) => acc = acc + el, 0);
+            return this.CART.map(el => Math.floor(el.price.replace(/\s/g, '')) * el.quantity).reduce((acc, el) => acc = acc + el, 0);
             // return this.CART
         }
 
@@ -142,6 +142,7 @@ export default {
         deleteFromCart(index) {
             this.DELETE_FROM_CART(index)
             localStorage.setItem('cart', JSON.stringify(this.CART));
+            
         },
         increment(index) {
             this.INCREMENT_CART_ITEM(index)

@@ -6,7 +6,7 @@ const session = require('express-session');
 
 const db = require('./db')
     // const authMiddleware = require('./authMiddleware');
-const PORT = process.env.PORT || 8089
+const PORT = process.env.PORT || 5555
 
 
 const multer = require('multer');
@@ -49,7 +49,7 @@ app.get('/products', async(req, res) => {
 app.use(express.json())
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:7777');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:7778');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();

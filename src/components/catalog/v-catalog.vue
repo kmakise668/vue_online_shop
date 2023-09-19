@@ -159,7 +159,7 @@ export default {
             }
         },
         addToCart(data) {
-            this.ADD_TO_CART(data);
+            this.ADD_TO_CART(data); // Вызываем действие Vuex для добавления товара в корзину
             this.showNotification = true;
 
             const newItem = {
@@ -167,6 +167,11 @@ export default {
                 data: data,
             };
             this.addedItems.push(newItem);
+
+            // Сохраняем корзину в локальном хранилище
+            localStorage.setItem('cart', JSON.stringify(this.CART));
+                    
+  
             setTimeout(() => {
                 const index = this.addedItems.findIndex(item => item.id === newItem.id);
                 if (index !== -1) {

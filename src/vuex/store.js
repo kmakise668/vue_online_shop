@@ -9,7 +9,7 @@ const store = createStore({
         cart: [],
         isAuthenticated: false,
         role: '',
-        user: '',
+        user: {},
 
     },
     mutations,

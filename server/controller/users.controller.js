@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 
 
 
-
 async function findUserByEmail(email) {
     try {
         console.log('Finding user by email:', email);
@@ -33,7 +32,7 @@ async function verifyPassword(password, hashedPassword) {
 async function generateTokens(user) {
     try {
         console.log('Generating tokens for user:', user);
-        const accessToken = jwt.sign({ email: user.email, role: user.role }, 'your-secret-key', { expiresIn: '1m' });
+        const accessToken = jwt.sign({ email: user.email, role: user.role, id: user.id }, 'your-secret-key', { expiresIn: '1h' });
         const refreshToken = jwt.sign({ email: user.email }, 'your-refresh-secret-key', { expiresIn: '7d' });
 
         const existingRefreshToken = await db.query('SELECT * FROM refresh_tokens WHERE id = $1', [user.id]);
@@ -56,6 +55,7 @@ async function generateTokens(user) {
 }
 
 class UsersController {
+
     async createUsers(req, res) {
         const { name, password, email, role } = req.body;
 
@@ -63,7 +63,7 @@ class UsersController {
             const existingUser = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
             if (existingUser.rows.length > 0) {
-                return res.status(400).json({ message: 'User already exists' });
+                return res.status(400).json({ message: 'Пользователь с такой почтой уже существует' });
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -130,6 +130,7 @@ class UsersController {
         }
     }
 
+
     async login(req, res) {
         const { email, password } = req.body;
 
@@ -139,14 +140,14 @@ class UsersController {
 
             if (!user) {
                 console.log('User not found:', email);
-                return res.status(401).json({ message: 'Invalid credentials' });
+                return res.status(401).json({ message: 'User not found' });
             }
 
             const isPasswordValid = await verifyPassword(password, user.password);
 
             if (!isPasswordValid) {
                 console.log('Invalid password for user:', email);
-                return res.status(401).json({ message: 'Invalid credentials' });
+                return res.status(401).json({ message: 'Invalid password' });
             }
 
             const tokens = await generateTokens(user);
