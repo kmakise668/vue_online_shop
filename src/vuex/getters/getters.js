@@ -20,4 +20,7 @@ export default {
     user(state) {
         return state.user;
     },
+    getNotifications(state) {
+        return state.notifications
+    },
 }

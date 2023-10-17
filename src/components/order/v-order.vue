@@ -123,7 +123,7 @@ export default {
     async fetchUserData(userId) {
       try {
         // Используйте userId в URL для получения данных текущего пользователя
-        const response = await axios.get(`http://localhost:5555/api/users/${userId}`);
+        const response = await axios.get(`http://localhost:7676/api/users/${userId}`);
         this.user = response.data;
         
       } catch (error) {

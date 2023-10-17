@@ -44,5 +44,14 @@ export default {
         if (state.cart[index].quantity > 1) {
             state.cart[index].quantity--
         }
-    }
+    },
+    ADD_NOTIFICATION(state, notification) {
+        state.notifications.push(notification);
+    },
+    REMOVE_NOTIFICATION(state, notification) {
+        const index = state.notifications.indexOf(notification);
+        if (index !== -1) {
+            state.notifications.splice(index, 1);
+        }
+    },
 }

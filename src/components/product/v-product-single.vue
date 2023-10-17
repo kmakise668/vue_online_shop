@@ -66,7 +66,7 @@ export default {
     mounted() {
         const productId = this.$route.params.id;
         axios
-            .get(`http://localhost:5555/api/products/${productId}`)
+            .get(`http://localhost:7676/api/products/${productId}`)
             .then((response) => {
                 this.product = response.data;
                 console.log(this.product.name);

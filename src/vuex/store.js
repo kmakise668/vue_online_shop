@@ -3,6 +3,7 @@ import actions from '@/vuex/actions/actions';
 import mutations from '@/vuex/mutations/mutations';
 import getters from '@/vuex/getters/getters';
 
+
 const store = createStore({
     state: {
         products: [],
@@ -10,6 +11,7 @@ const store = createStore({
         isAuthenticated: false,
         role: '',
         user: {},
+        notifications: [],
 
     },
     mutations,

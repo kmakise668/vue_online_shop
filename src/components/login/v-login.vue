@@ -56,7 +56,7 @@
   async login(event) {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5555/api/users/login', {
+      const response = await axios.post('http://localhost:7676/api/users/login', {
         email: this.email,
         password: this.password,
       });
@@ -82,11 +82,14 @@
       }
     } catch (error) {
     console.error(error);
-    if (error.response.status === 401) {
-      this.errorMessage = 'Ошибка: ' + error.response.data.message
-    } else if (error.response.status === 500) {
-      this.errorMessage = 'Внутренняя ошибка сервера';
-    }
+    if (error.response && error.response.status === 401) {
+  this.errorMessage = 'Ошибка: ' + error.response.data.message
+} else if (error.response && error.response.status === 500) {
+  this.errorMessage = 'Внутренняя ошибка сервера';
+} else {
+  this.errorMessage = 'Не удалось выполнить запрос';
+}
+
 }
 
 

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="bg-white">
 
 
@@ -46,4 +46,327 @@ export default {
     vBreadcrumb
   },
 }
+</script> -->
+
+<template>
+    <div class="main__slide">
+      <!-- 
+    <div class="aurora">
+      <div class="aurora__item"></div>
+      <div class="aurora__item"></div>
+      <div class="aurora__item"></div>
+      <div class="aurora__item"></div>
+    </div> -->
+  </div>
+  <div class="main__slide mx-auto max-w-2xl flex px-4 pt-32 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8 justify-between">
+    <div class="main__content">
+      <h1>Исследуй, Путешествуй, Познавай <br> Наш магазин для твоих приключений!</h1>
+    </div>
+    <swiper 
+  :mousewheel="true"
+    :pagination="{ clickable: true }"
+   :direction="'horizontal'"
+    :effect="'coverflow'"
+    :grabCursor="true"
+
+    :centeredSlides="true"
+    :coverflowEffect="{
+      rotate: 0,
+      stretch: 0,
+      depth: 100,
+      modifier: 3,
+      slideShadows: true,
+    }"
+    :keyboard="{ enabled: true }"
+    :initialSlide="2"
+    :slidesPerView="5"
+  :spaceBetween="10" 
+  :loop="true"
+
+    :breakpoints="{
+      640: { slidesPerView: 2 },
+      768: { slidesPerView: 2 },
+      1024: { slidesPerView: 3 },
+      1560: { slidesPerView: 5 } 
+    }"
+     @swiper="onSwiper"
+  >
+    <swiper-slide v-for="n in 7" :key="n"> {{ n }} </swiper-slide>
+  </swiper>
+  </div>
+<div class="bubble-container">
+  <div class="bubble-wrap">
+  <div class="bubble"  v-for="n in 20" :key="n"></div>
+</div>
+</div>
+
+</template>
+
+<script>
+import { Swiper, SwiperSlide } from 'swiper/vue';
+// import SwiperCore  from "swiper/core";
+import {EffectCoverflow,  Mousewheel, Autoplay, Pagination} from 'swiper/modules';
+
+// import 'swiper/swiper-bundle.css';
+// SwiperCore.use([EffectCoverflow]);
+import 'swiper/swiper-bundle.css';
+import SwiperCore from "swiper/core";
+
+SwiperCore.use([Pagination, Mousewheel, Autoplay, EffectCoverflow]);
+export default {
+  
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
+  methods: {
+    onSwiper(swiper) {
+    console.log("Swiper initialized", swiper);
+  },
+    onSlideChange: function () {
+      console.log("Slide change");
+    },
+  },
+};
 </script>
+
+
+
+<style>
+
+
+
+
+.first__page {
+
+}
+.swiper {
+  width: 50%;
+  flex-shrink: 0;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  position: relative;
+  z-index: 100;
+}
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 20rem;
+  height: 20rem;
+  font-size: 24px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.swiper-slide:nth-child(1n) {
+  background-color: palevioletred;
+}
+.swiper-slide:nth-child(2n) {
+  background-color: skyblue;
+}
+.swiper-slide:nth-child(3n) {
+  background-color: peru;
+}
+.swiper-slide:nth-child(4n) {
+  background-color: cadetblue;
+}
+.swiper-slide:nth-child(5n) {
+  background-color: plum;
+}
+.swiper-slide:nth-child(6n) {
+  background-color: goldenrod;
+}
+.swiper-slide:nth-child(7n) {
+  background-color: palegreen;
+}
+
+/* .main__slide { */
+  /* position: relative; */
+  /* overflow: hidden;
+  font-size: 5rem;
+  text-align: center;
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: .3rem;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.428); */
+  /* margin-top: 8rem; */
+/* } */
+
+
+.main__slide {
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  .main__content {
+    width: 50%;
+    flex-shrink: 0;
+  }
+}
+
+.aurora {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  mix-blend-mode: darken;
+  pointer-events: none;
+  
+}
+
+.aurora__item {
+  overflow: hidden;
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  background-color: #00c2ff;
+  border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  filter: blur(1rem);
+  mix-blend-mode: overlay;
+}
+
+.aurora__item:nth-of-type(1) {
+  top: -50%;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-1 12s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(2) {
+  background-color: #ffc640;
+  right: 0;
+  top: 0;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-2 12s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(3) {
+  background-color: #33ff8c;
+  left: 0;
+  bottom: 0;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-3 8s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(4) {
+  background-color: #e54cff;
+  right: 0;
+  bottom: -50%;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-4 24s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-1 {
+  0% {
+    top: 0;
+    right: 0;
+  }
+
+  50% {
+    top: 100%;
+    right: 75%;
+  }
+
+  75% {
+    top: 100%;
+    right: 25%;
+  }
+
+  100% {
+    top: 0;
+    right: 0;
+  }
+}
+
+@keyframes aurora-2 {
+  0% {
+    top: -50%;
+    left: 0%;
+  }
+
+  60% {
+    top: 100%;
+    left: 75%;
+  }
+
+  85% {
+    top: 100%;
+    left: 25%;
+  }
+
+  100% {
+    top: -50%;
+    left: 0%;
+  }
+}
+
+@keyframes aurora-3 {
+  0% {
+    bottom: 0;
+    left: 0;
+  }
+
+  40% {
+    bottom: 100%;
+    left: 75%;
+  }
+
+  65% {
+    bottom: 40%;
+    left: 50%;
+  }
+
+  100% {
+    bottom: 0;
+    left: 0;
+  }
+}
+
+@keyframes aurora-4 {
+  0% {
+    bottom: -50%;
+    right: 0;
+  }
+
+  50% {
+    bottom: 0%;
+    right: 40%;
+  }
+
+  90% {
+    bottom: 50%;
+    right: 25%;
+  }
+
+  100% {
+    bottom: -50%;
+    right: 0;
+  }
+}
+
+@keyframes aurora-border {
+  0% {
+    border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  }
+
+  25% {
+    border-radius: 47% 29% 39% 49% / 61% 19% 66% 26%;
+  }
+
+  50% {
+    border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%;
+  }
+
+  75% {
+    border-radius: 28% 49% 29% 100% / 93% 20% 64% 25%;
+  }
+
+  100% {
+    border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  }
+}
+
+</style>

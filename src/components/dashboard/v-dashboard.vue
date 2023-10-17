@@ -1,22 +1,22 @@
 <template>
-  <div class="">
-    <h1>Личный кабинет</h1>
-    <p>Имя пользователя: {{ user.name }}</p>
-    <p>Email: {{ user.email }}</p>
-    <p>Роль: <span v-if="user.role === 1">Администратор</span></p>
-    <vAddProductsForm />
+  <div class="bg-gray-50 my-12 border-dashed border-2 rounded-xl p-8">
+
+    <!-- <vAddProductsForm /> -->
+    <VAdminProfile />
+
+    
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex';
-import vAddProductsForm from '../v-add-products-form.vue';
+import { mapGetters, mapActions } from 'vuex';
+import VAdminProfile from './v-admin-profile.vue';
+// import vAddProductsForm from '../v-add-products-form.vue';
 
 export default {
   components: {
-    vAddProductsForm 
-  },
+    VAdminProfile
+},
   data() {
     return {
     };

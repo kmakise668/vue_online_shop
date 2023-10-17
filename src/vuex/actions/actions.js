@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
     GET_PRODUCTS_FROM_API({ commit }) {
         return axios
-            .get('http://localhost:5555/api/products') // Используйте метод get для получения данных
+            .get('http://localhost:7676/api/products') // Используйте метод get для получения данных
             .then((response) => {
                 const products = response.data;
                 products.forEach((item) => {
@@ -19,7 +19,7 @@ export default {
     },
     async addProduct({ commit, dispatch }, productData) {
         try {
-            const response = await axios.post('http://localhost:5555/api/products', productData);
+            const response = await axios.post('http://localhost:7676/api/products', productData);
             const newProduct = response.data;
             commit('ADD_PRODUCT', newProduct); // Вызываем мутацию для добавления продукта в состояние
             await dispatch('GET_PRODUCTS_FROM_API'); // Вызываем действие для обновления списка товаров
@@ -43,7 +43,7 @@ export default {
     },
     async fetchUserData({ commit }, userId) {
         try {
-            const response = await axios.get(`http://localhost:5555/api/users/${userId}`);
+            const response = await axios.get(`http://localhost:7676/api/users/${userId}`);
             commit('SET_USER', response.data);
         } catch (error) {
             console.error(error);
@@ -60,5 +60,13 @@ export default {
         this.$store.commit('SET_AUTH', false);
         this.$store.commit('SET_ROLE', null);
         this.$router.push('/login');
+    },
+    addNotification({ commit }, notification) {
+        commit("ADD_NOTIFICATION", notification);
+        // Здесь можно установить таймер для автоматического удаления уведомления через некоторое время
+    },
+
+    removeNotification({ commit }, notification) {
+        commit("REMOVE_NOTIFICATION", notification);
     },
 }

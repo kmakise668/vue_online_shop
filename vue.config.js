@@ -1,6 +1,22 @@
-const { defineConfig } = require('@vue/cli-service')
+// const { defineConfig } = require('@vue/cli-service')
 
-module.exports = defineConfig({
+// module.exports = defineConfig({
+//     devServer: {
+//         port: 7777
+//     },
+//     css: {
+//         loaderOptions: {
+//             sass: {
+//                 prependData: `
+//               @import "@/assets/styles/style.scss";
+//             `
+//             }
+//         },
+//         extract: false
+//     }
+// })
+
+module.exports = {
     devServer: {
         port: 7777
     },
@@ -14,4 +30,4 @@ module.exports = defineConfig({
         },
         extract: false
     }
-})
+}

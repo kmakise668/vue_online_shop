@@ -57,7 +57,7 @@ async function generateTokens(user) {
 class UsersController {
 
     async createUsers(req, res) {
-        const { name, password, email, role } = req.body;
+        const { name, password, email, role, phone } = req.body;
 
         try {
             const existingUser = await db.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -69,7 +69,7 @@ class UsersController {
             const hashedPassword = await bcrypt.hash(password, 10);
 
             const newUser = await db.query(
-                'INSERT INTO users (name, password, email, role) VALUES ($1, $2, $3,  $4) RETURNING *', [name, hashedPassword, email, role]
+                'INSERT INTO users (name, password, email, role, phone) VALUES ($1, $2, $3,  $4, $5) RETURNING *', [name, hashedPassword, email, role, phone]
             );
 
 
@@ -110,18 +110,35 @@ class UsersController {
         res.json(users.rows);
     }
 
+    // async getOneUsers(req, res) {
+    //     const id = req.params.id;
+    //     const user = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+    //     res.json(user.rows[0]);
+    // }
+
     async getOneUsers(req, res) {
         const id = req.params.id;
+
+        // Проверка наличия значения id и его корректности
+        if (!id || isNaN(id)) {
+            return res.status(400).json({ error: 'Invalid id parameter' });
+        }
+
         const user = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+
+        // Проверка на наличие результатов из базы данных
+        if (user.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
         res.json(user.rows[0]);
     }
-
     async updateUsers(req, res) {
-        const { id, name, password, email, role } = req.body;
+        const { id, name, email, role, phone } = req.body;
         try {
-            const hashedPassword = await bcrypt.hash(password, 10);
+            // const hashedPassword = await bcrypt.hash(password, 10);
             const user = await db.query(
-                'UPDATE users SET name = $2, password = $3, email = $4, role = $5 WHERE id = $1 RETURNING *', [id, name, hashedPassword, email, role]
+                'UPDATE users SET name = $2, email = $3, role = $4, phone = $5 WHERE id = $1 RETURNING *', [id, name, email, role, phone]
             );
             res.json(user.rows[0]);
         } catch (error) {
@@ -177,7 +194,61 @@ class UsersController {
         const user = await db.query('DELETE FROM users WHERE id = $1', [id]);
         res.json(user.rows[0]);
     }
+    async checkPassword(req, res) {
+        try {
+            const { oldPassword } = req.body;
+            const userId = parseInt(req.body.userId, 10);
+
+            const result = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
+
+            if (result && result.rows.length > 0) {
+                const user = result.rows[0];
+                const hashedPasswordFromDatabase = user.password;
+
+                // Расшифровать пароль пользователя из базы данных
+                const isPasswordValid = await bcrypt.compare(oldPassword, hashedPasswordFromDatabase);
+
+                console.log("Введенный пароль:", oldPassword);
+                console.log("Хешированный пароль из базы данных:", hashedPasswordFromDatabase);
+                console.log("Результат сравнения:", isPasswordValid);
+
+                if (isPasswordValid) {
+                    res.json({ valid: true });
+                } else {
+                    res.json({ valid: false });
+                }
+            } else {
+                res.json({ valid: false });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+
+
+    async updatePassword(req, res) {
+        try {
+            const { newPassword, userId } = req.body; // Получаем идентификатор текущего пользователя из запроса
+
+            const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+            // Здесь вы должны выполнить запрос к базе данных для обновления пароля только для текущего пользователя.
+            // Замените 'users' на имя вашей таблицы пользователей и 'password' на имя столбца с паролями.
+            await db.query('UPDATE users SET password = $1 WHERE id = $2', [hashedNewPassword, userId]);
+
+
+            res.json({ message: 'Password updated successfully ' + newPassword });
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+
 }
+
+
 
 module.exports = new UsersController();
 

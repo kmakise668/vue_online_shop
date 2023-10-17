@@ -29,6 +29,12 @@
             <input id="email" name="email" type="email" autocomplete="email" v-model="email" required="" class="block w-full rounded-md border-0 py-1.5  px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
           </div>
         </div>
+        <div>
+          <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Номер телефона</label>
+          <div class="">
+            <input id="phone" name="phone" type="text" autocomplete="phone" v-model="phone" required="" class="block w-full rounded-md border-0 py-1.5  px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+          </div>
+        </div>
 
         <div>
           <div class="flex items-center justify-between">
@@ -64,6 +70,7 @@ export default {
       password: '',
       email: '',
       registrationMessage: '',
+      phone: this.phone,
       role: 0    // Переменная для хранения сообщения о регистрации
     };
   },
@@ -73,10 +80,11 @@ export default {
     async registerUser(event) {
   event.preventDefault();
   try {
-    const response = await axios.post('http://localhost:5555/api/users', {
+    const response = await axios.post('http://localhost:7676/api/users', {
       name: this.name,
       password: this.password,
       email: this.email,
+      phone: this.phone,
       role: '0'
     });
  

@@ -1,26 +1,53 @@
 <template>
-
-
-<header v-if=" isAuthenticated && user.role === 1" class="admin_header  inset-x-0 t-0 z-50 h-32 fixed top-0 w-full p-8 flex items-center">
-    <div class="header-sidebar fixed   bg-blue-600  w-30 left-0 h-screen bottom-0">
-        <router-link to="/" class="-m-1.5 p-1.5">
-            <img class="w-14" src="@/assets/images/logo_3.png" alt="" />
+<header v-if="isAdminPage" class="admin_header flex">
+    <div class="header-sidebar fixed   bg-black  w-1/5 left-0 h-screen py-6 px-4 bottom-0">
+        <div class="text-xl text-white font-medium  font-sans mb-8 tracking-wide">Личный кабинет</div>
+        <router-link :to="{ name: 'cart' }" class="flex items-center mb-2 px-3 py-2 rounded-md transition duration-300 border-2 border-solid border-black hover:border-pink-500">
+            <HomeIcon  class="w-6 text-neutral-100"/>
+            <div class="text-neutral-100 ml-2">Главная</div>
         </router-link>
+        <router-link :to="{ name: 'cart' }" class="flex items-center mb-2 px-3 py-2 rounded-md transition duration-300 hover:bg-blue-700">
+            <UserIcon  class="w-6 text-neutral-100"/>
+            <div class="text-neutral-100 ml-2">Личный кабинет</div>
+        </router-link>
+        <router-link :to="{ name: 'cart' }" class="flex items-center mb-2 px-3 py-2 rounded-md transition duration-300 hover:bg-blue-700">
+            <UserGroupIcon  class="w-6 text-neutral-100"/>
+            <div class="text-neutral-100 ml-2">Все пользователя</div>
+        </router-link>
+        <router-link :to="{ name: 'cart' }" class="flex items-center mb-2 px-3 py-2 rounded-md transition duration-300 hover:bg-blue-700">
+            <PhoneIcon class="w-6 text-neutral-100"/>
+            <div class="text-neutral-100 ml-2">Заявки на сайте</div>
+        </router-link>
+        <router-link :to="{ name: 'cart' }" class="flex items-center mb-2 px-3 py-2 rounded-md transition duration-300 hover:bg-blue-700">
+            <ShoppingCartIcon  class="w-6 text-neutral-100"/>
+            <div class="text-neutral-100 ml-2">Товары</div>
+        </router-link>
+        <router-link :to="{ name: 'cart' }" class="flex items-center mb-2 px-3 py-2 rounded-md transition duration-300 hover:bg-blue-700">
+            <NewspaperIcon  class="w-6 text-neutral-100"/>
+            <div class="text-neutral-100 ml-2">Новости</div>
+        </router-link>
+        
+
     </div>
-<div class="admin left-35 flex justify-between">
-    <form class="group relative shadow-md ">
+<div class="admin flex justify-between ml-auto grow">
+    <form class="group relative shadow-md  grow">
         <SearchIcon class="text-slate-500 absolute w-5 h-5 top-2.5 left-2.5" />
-        <input class="focus:ring-2 focus:ring-blue-300 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-blue-200 shadow-sm" type="text" aria-label="Filter projects" placeholder="Поиск..." v-model="searchQuery" @input="search" />
+        <!-- <input class="focus:ring-2 focus:ring-blue-300 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-blue-200 shadow-sm" type="text" aria-label="Filter projects" placeholder="Поиск..." v-model="searchQuery" @input="search" /> -->
     </form>
 
-    <Menu as="div" class="relative ml-6" v-if="isAuthenticated">
-            <div>
-                <MenuButton class="flex max-w-xs items-end rounded-full bg-blue-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-5 focus:ring-offset-blue-800">
+    <Menu as="div" class="relative ml-6" >
+            <MenuButton class="flex items-center  leading-none justify-start cursor-pointer">
+                <div class="flex max-w-xs  items-end rounded-full bg-blue-600 text-sm outline-none ring-2 ring-blue-300 ring-offset-5 ring-offset-blue-800">
 
-                    <div class="h-12 w-12 rounded-full text-white uppercase flex items-center justify-center font-bold text-2xl line-height-0">  <span v-if="user.email && user.email.length > 0">{{ user.email.charAt(0) }}</span></div>
-
-                </MenuButton>
-            </div>
+                    <div class="h-10 w-10 rounded-full text-white uppercase flex items-center justify-center font-bold text-xl ">  <span v-if="user.email && user.email.length > 0">{{ user.email.charAt(0) }}</span></div>
+          
+                </div>
+                <div class=" ml-3 mr-3 "> 
+                    <h6 class="font-medium  text-sm ">{{ user.name }}</h6>
+                    <span class="text-xs text-left text-gray-400">Администратор</span>
+                </div>
+                <ChevronDownIcon class="h-5 w-4 text-gray-700" />
+            </MenuButton>
             <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                 <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
@@ -35,7 +62,7 @@
 </div>
 </header>
 
-<header v-else-if="isAuthenticated || !isAuthenticated" class="fixed  inset-x-0 top-0 z-50" :class="{ 'shadow-sm bg-blue-50': scrolled }">
+<header v-else class="fixed  inset-x-0 top-0 z-50" :class="{ 'shadow-sm bg-blue-50': scrolled }">
     <nav class="flex items-center justify-between p-6  mx-auto max-w-2xl   lg:max-w-7xl  lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1 items-center">
             <router-link to="/" class="-m-1.5 p-1.5">
@@ -145,6 +172,7 @@ import {
     DisclosureButton,
     DisclosurePanel,
     Menu,
+    
     MenuButton,
     MenuItem,
     MenuItems,
@@ -155,6 +183,12 @@ import {
     MenuAlt2Icon,
     XIcon,
     ShoppingCartIcon,
+    ChevronDownIcon,
+    UserGroupIcon,
+    UserIcon,
+    SearchIcon,
+    NewspaperIcon,
+    HomeIcon,PhoneIcon
     // Bars3Icon,
     // BellIcon,
     // XMarkIcon
@@ -169,9 +203,13 @@ export default {
     components: {
         Dialog,
         DialogPanel,
-        MenuAlt2Icon,
-        XIcon,
         ShoppingCartIcon,
+        MenuAlt2Icon,
+        UserIcon,
+        SearchIcon,
+        NewspaperIcon,
+        ChevronDownIcon,PhoneIcon,
+        XIcon,
         Disclosure,
         DisclosureButton,
         DisclosurePanel,
@@ -179,6 +217,8 @@ export default {
         MenuButton,
         MenuItem,
         MenuItems,
+        HomeIcon,
+        UserGroupIcon,
     },
 
     data() {
@@ -252,8 +292,10 @@ export default {
         },
     },
     computed: {
-        ...mapGetters(['user', 'CART', 'isAuthenticated', 'role'])
-
+        ...mapGetters(['user', 'CART', 'isAuthenticated', 'role']),
+        isAdminPage() {
+        return this.$route.path.includes('/admin');
+        }
     },
     mounted() {
         window.addEventListener('scroll', this.handleScroll);

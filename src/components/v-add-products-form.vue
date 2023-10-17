@@ -9,11 +9,20 @@
     <textarea name="description"  v-model="description" id="description" cols="30" rows="10" placeholder="description"></textarea>
     <button type="submit">Add Product</button>
 </form>
+
+
+
 </template>
 
+
+
 <script>
+// import { PhotoIcon, UserCircleIcon } from '@heroicons/vue/outline';
     import axios from 'axios';
     export default {
+      // components: {
+      //   UserCircleIcon, PhotoIcon
+      // },
         data() {
             return {
                 name: '',
@@ -30,7 +39,7 @@
             async addProduct(event) {
                 event.preventDefault();
                 try {
-                    const response = await axios.post('http://localhost:5555/api/products', {
+                    const response = await axios.post('http://localhost:7676/api/products', {
                         name: this.name,
                         article: this.article,
                         price: this.price,

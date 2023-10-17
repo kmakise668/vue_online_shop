@@ -18,7 +18,10 @@ const usersController = require('../controller/users.controller');
 router.post('/', usersController.createUsers);
 router.get('/', usersController.getUsers);
 router.get('/:id', usersController.getOneUsers);
-router.put('/', usersController.updateUsers);
+router.put('/user-update', usersController.updateUsers);
 router.delete('/:id', usersController.deleteUsers);
 router.post('/login', usersController.login);
+router.post('/check-password', usersController.checkPassword);
+router.put('/update-password', usersController.updatePassword);
+
 module.exports = router
