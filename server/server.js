@@ -35,7 +35,7 @@ app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 } // Например, установите 1 час 3600000 
+    cookie: { maxAge: 60000 }
 }));
 app.get('/products', async(req, res) => {
     try {
@@ -49,7 +49,7 @@ app.get('/products', async(req, res) => {
 app.use(express.json())
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:7780');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:7806');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();

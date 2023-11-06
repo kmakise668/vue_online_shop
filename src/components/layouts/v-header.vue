@@ -62,11 +62,11 @@
 </div>
 </header>
 
-<header v-else class="fixed  inset-x-0 top-0 z-50" :class="{ 'shadow-sm bg-blue-50': scrolled }">
-    <nav class="flex items-center justify-between p-6  mx-auto max-w-2xl   lg:max-w-7xl  lg:px-8" aria-label="Global">
+<header v-else class="fixed inset-x-0 top-0 z-50  p-1  delay-100 transition duration-300" :class="{ 'shadow-sm bg-white border-gray-300 border-b p-0 duration-300': scrolled }">
+    <nav class="flex items-center justify-between  mx-auto max-w-2xl lg:max-w-7xl  lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1 items-center">
             <router-link to="/" class="-m-1.5 p-1.5">
-                <img class="w-14" src="@/assets/images/logo_3.png" alt="" />
+                <img class="w-14 transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-90 duration-300" :class="{ 'scale-75 duration-300': scrolled }" src="@/assets/images/logo_3.png" alt="" />
             </router-link>
             <div class="ml-3">
                 <div class="text-gray-900 font-medium">Откройте мир Trailz</div>
@@ -80,7 +80,7 @@
             </button>
         </div>
         <div class="hidden lg:flex lg:gap-x-12">
-            <router-link v-for="item in navigation" :key="item.name" :to="item.href" class="text-md transition font-normal leading-6 text-gray-900 hover:text-blue-500 ">{{ item.name }}</router-link>
+            <router-link v-for="item in navigation" :key="item.name" :to="item.href" class="text-sm transition font-normal leading-6 text-gray-900 hover:text-blue-500 ">{{ item.name }}</router-link>
         </div>
 
         <div class="hidden relative lg:flex lg:flex-1 lg:justify-end">

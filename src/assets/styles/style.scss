@@ -1,58 +1,189 @@
-@import './variables.scss';
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background: #F7F7F7;
     h1 {
         color: red;
-        font-size: 3rem;
     }
-}
-
-@keyframes move {
-    100% {
-        transform: translate3d(0, 0, -1000px);
+    @keyframes move {
+        100% {
+            transform: translate3d(0, 0, -1000px);
+        }
     }
-}
-
-.bubble-container {
-    position: relative;
-    width: 100%;
-    min-height: 100%;
-    transform-style: preserve-3d;
-}
-
-.bubble-wrap {
-    margin: 0 auto;
-    width: 500px;
-    height: 500px;
-    transform-style: preserve-3d;
-    transform-origin: center center;
-    perspective: 600px;
-}
-
-.bubble-wrap {
-    margin: 0 auto;
-    width: 500px;
-    height: 500px;
-    transform-style: preserve-3d;
-    transform-origin: center center;
-    perspective: 600px;
-}
-
-@for $i from 1 through 100 {
-    .bubble:nth-child(#{$i}) {
-        $size: random(30) + px;
-        height: $size;
-        width: $size;
-        animation-delay: -$i * 0.2s;
-        transform: translate3d(random(1000) * 1px, random(1000) * 1px, random(2000) * 1px);
-        background: hsl(random(360), 70%, 50%);
+    .bubble-container {
+        // overflow: hidden;
+        position: absolute;
+        transform-style: preserve-3d;
+        right: 8%;
+        // left: 0;
+        top: 50%;
+        // bottom: 30%;
+        transform: rotate(100deg);
+        z-index: 0;
+        // transform: rotate(180deg);
     }
-}
-
-.bubble {
-    position: absolute;
-    background: black;
-    opacity: 0.7;
-    border-radius: 50%;
-    animation: move 3s infinite;
+    .bubble-wrap {
+        margin: 0 auto;
+        width: 100vw;
+        height: 100vh;
+        transform-style: preserve-3d;
+        transform-origin: center center;
+        perspective: 600px;
+    }
+    .bubble {
+        position: absolute;
+        background: black;
+        opacity: .7;
+        border-radius: 50%;
+        animation: move 5s infinite;
+    }
+    // @for $i from 1 through 100 {
+    //     .bubble:nth-child(#{$i}) {
+    //         $size: random(30)+px;
+    //         height: $size;
+    //         width: $size;
+    //         animation-delay: -$i * .2s;
+    //         transform: translate3d( (random(1000) * 1px), (random(1000) * 1px), (random(2000) * 1px));
+    //         background: hsl( random(360), 70%, 50%);
+    //     }
+    // }
+    @for $i from 1 through 100 {
+        .bubble:nth-child(#{$i}) {
+            $size: random(30) + px;
+            height: $size;
+            width: $size;
+            animation-delay: -$i * 2s;
+            transform: translate3d(random(1000) * 1px, random(1000) * 1px, random(2000) * 1px);
+            background: hsl(random(350), 40%, 50%);
+        }
+    }
+    .main-wrapper {
+        width: 100%;
+        overflow: hidden;
+    }
+    .swiper {
+        width: 100%;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 100;
+    }
+    .swiper-slide {
+        background-position: center;
+        background-size: cover;
+        border-radius: 0.5rem;
+        height: 20rem;
+        display: flex;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 1;
+        padding-top: 2.5rem;
+        img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            object-fit: cover;
+            object-position: center;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .text-container {
+            position: relative;
+            z-index: 2;
+            margin: 0 auto;
+            position: relative;
+            line-height: 1.2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .title {
+                font-size: 1.25rem;
+                margin-bottom: 0.8rem;
+                font-weight: 700;
+                max-width: 85%;
+                position: relative;
+                z-index: 2;
+            }
+            .text {
+                max-width: 80%;
+                position: relative;
+                z-index: 2;
+            }
+            &::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                margin: 0 auto;
+                background: linear-gradient(to top, rgba(0, 0, 0, 0), #4e064da2);
+                filter: blur(2.5rem);
+                z-index: 0;
+                transition: .3s;
+            }
+            &::after {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                margin: 0 auto;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #16022e90);
+                filter: blur(2.5rem);
+                z-index: 0;
+                transition: .3s;
+            }
+        }
+    }
+    .swiper-slide.swiper-slide-active {}
+    //       <div class="flex flex-row items-center">
+    //     <div class="flex flex-col justify-center items-center">
+    //     <div class="bg-[#8e5f27] h-4 w-8 rounded-t-md"></div>
+    //     <div class="w-12 h-60 bg-[#0c2e41] rounded-t-md"></div>
+    //     <div class="w-12 h-2 bg-yellow-600 rounded-t-full -mt-2"></div>
+    //     <div class="bg-[#8e5f27] h-4 w-8 rounded-t-md"></div>
+    //   </div>
+    //   <div
+    //     class="box-content relative h-52 w-[500px] relative border-[#0c2e41] border-8 slide-ltr sliding-ltr flex flex-row ease"
+    //   >
+    //     Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque ipsum beatae
+    //     doloremque!
+    //     <img
+    //       class="h-full object-fit"
+    //       src="https://oss-product-img.artfoxlive.com/profile-prod/201808/1535351142442_1774829_origin.jpg?x-oss-process=style/l_watermark"
+    //     />
+    //   </div>
+    // </div>
+    .ease {
+        animation-timing-function: ease;
+    }
+    .slide-ltr {
+        clip-path: polygon(100% 0, 100% 100%, 100% 100%, 100% 0);
+    }
+    .sliding-ltr {
+        animation-name: sliding-ltr;
+        animation-duration: 5s;
+        animation-fill-mode: forwards;
+        animation-delay: 0.5s;
+    }
+    @keyframes sliding-ltr {
+        0% {
+            transform: translateX(-100%);
+            clip-path: polygon(100% 0, 100% 100%, 100% 100%, 100% 0);
+        }
+        100% {
+            transform: translateX(-0.5%);
+            clip-path: polygon(100% 0, 100% 100%, 0% 100%, 0 0);
+        }
+    }
+    // transform: rotateX(20deg)rotateZ(-20deg)skewY(8deg);
 }

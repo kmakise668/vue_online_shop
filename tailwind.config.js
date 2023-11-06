@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    plugins: [require("daisyui")],
     content: ['./public/**/*.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
     presets: [],
     darkMode: 'media', // or 'class'
@@ -163,7 +164,7 @@ module.exports = {
             fuchsia: colors.fuchsia,
             pink: colors.pink,
             blue: colors.blue,
-            rose: colors.rose,
+            blue: colors.blue,
         }),
         columns: {
             auto: 'auto',
@@ -992,5 +993,5 @@ module.exports = {
             50: '50',
         },
     },
-    plugins: [],
+
 }
